@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed }
+public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
 {
-    public bool Die;
+    Player_Movement PM;
 
     [Header("Piece")]
     public aRoom actualRoom;
@@ -34,6 +34,7 @@ public class IAMovement : MonoBehaviour
         myNavMesh = GetComponent<NavMeshAgent>();
         myAnimator = GetComponentInChildren<Animator>();
         RM = RoomManager.Instance;
+        PM = Player_Movement.Instance;
     }
 
     private void Start()
@@ -80,8 +81,26 @@ public class IAMovement : MonoBehaviour
                 if(MoveTime >= 1)
                 {
                     MoveTime = 0;
+                    myNavMesh.enabled = true;
                     Fuite();
                 }
+            }
+
+            else if(myAction == Action.Found)
+            {
+                MoveTime += Time.deltaTime;
+                transform.LookAt(new Vector3(PM.gameObject.transform.position.x, transform.position.y, PM.gameObject.transform.position.z));
+                if (MoveTime >= 1)
+                {
+                    MoveTime = 0;
+                    myNavMesh.enabled = true;                    
+                    StartPursuit();
+                }
+            }
+
+            else if(myAction == Action.Attack)
+            {
+                myNavMesh.SetDestination(PM.gameObject.transform.position);
             }
 
             else if (myAction == Action.Move || myAction == Action.Flee)
@@ -168,7 +187,8 @@ public class IAMovement : MonoBehaviour
     public void Hited(Vector3 HitingEntity, bool Lethal = false)
     {
         myNavMesh.enabled = false;
-        Vector3 Direction = HitingEntity - transform.position;
+        transform.LookAt(new Vector3(HitingEntity.x, transform.position.y, HitingEntity.z));
+
         MoveTime = 0;
         myAction = Action.Paralysed;
         myAnimator.SetTrigger("Hited");
@@ -182,13 +202,16 @@ public class IAMovement : MonoBehaviour
 
         for (int i = 0; i < theEnnemies.Count; i++)
         {
-            if (theEnnemies[i].myType == Type.Civilian)
+            if(theEnnemies[i] != this && theEnnemies[i].myAction != Action.Paralysed && Vector3.Distance(transform.position, theEnnemies[i].transform.position) <= 10)
             {
-                theEnnemies[i].Fuite();
-            }
-            else
-            {
-                // Poursuite;
+                if (theEnnemies[i].myType == Type.Civilian)
+                {
+                    theEnnemies[i].Fuite();
+                }
+                else if(theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
+                {
+                    theEnnemies[i].Found();
+                }
             }
         }
 
@@ -201,5 +224,21 @@ public class IAMovement : MonoBehaviour
     void Mort()
     {
         myAction = Action.Dead;
+    }
+
+    public void Found()
+    {
+        myNavMesh.enabled = false;
+        MoveTime = 0;
+        myAction = Action.Found;
+        myAnimator.SetTrigger("Found");
+    }
+
+    public void StartPursuit()
+    {
+        myNavMesh.enabled = true;
+        myNavMesh.speed = 5f;
+        myAnimator.SetTrigger("Run");
+        myAction = Action.Attack;
     }
 }
