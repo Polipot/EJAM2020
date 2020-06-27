@@ -10,6 +10,7 @@ public class aRoom : MonoBehaviour
 
     [Header("Stats")]
     public PopValeur Densité;
+    public List<Action> Actions_Spéciales;
     [HideInInspector]
     public Dictionary<IAMovement, string> Population;
 

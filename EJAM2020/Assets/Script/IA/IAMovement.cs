@@ -45,7 +45,7 @@ public class IAMovement : MonoBehaviour
             Fuite();
         }
 
-        if(myAction == Action.None)
+        if(myAction == Action.None || myAction == Action.Dance)
         {
             MoveTime += Time.deltaTime;
             if(MoveTime >= MoveLatence)
@@ -59,8 +59,16 @@ public class IAMovement : MonoBehaviour
         {
             if(myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
             {
-                myAction = Action.None;
-                myAnimator.SetTrigger("StopMovement");
+                if(actualRoom.Actions_Spéciales.Count == 0)
+                {
+                    myAction = Action.None;
+                    myAnimator.SetTrigger("StopMovement");
+                }
+                else
+                {
+                    myAction = actualRoom.Actions_Spéciales[0];
+                    myAnimator.SetTrigger("Dance");
+                }
             }
         }
     }
@@ -77,7 +85,7 @@ public class IAMovement : MonoBehaviour
         {
             aRoom theNewRoom = RM.Rooms[Random.Range(0, RM.Rooms.Count)];
 
-            if (Random.Range(0, 2) <= (int)theNewRoom.Densité)
+            if (Random.Range(0, 2) <= (int)theNewRoom.Densité && theNewRoom != actualRoom)
             {
                 theRoom = theNewRoom;
             }
