@@ -3,3 +3,11 @@ Library/*
 obj/*
 *.sln
 *.csproj
+
+EJAM2020/Library/
+
+EJAM2020/.vs/
+
+EJAM2020/Temp/
+
+EJAM2020/obj/

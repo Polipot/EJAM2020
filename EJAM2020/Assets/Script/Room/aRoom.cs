@@ -6,9 +6,10 @@ public enum PopValeur { Faible, Moyenne, Forte }
 
 public class aRoom : MonoBehaviour
 {
+    RoomManager RM;
+
     [Header("Stats")]
     public PopValeur Densité;
-
     [HideInInspector]
     public Dictionary<IAMovement, string> Population;
 
@@ -26,6 +27,9 @@ public class aRoom : MonoBehaviour
         downLeft = transform.TransformPoint(myBoxCollider.center + new Vector3(-myBoxCollider.size.x, 0, -myBoxCollider.size.z) * 0.5f);
 
         Population = new Dictionary<IAMovement, string>();
+
+        RM = RoomManager.Instance;
+        RM.Rooms.Add(this);
     }
 
     // Update is called once per frame
@@ -34,7 +38,7 @@ public class aRoom : MonoBehaviour
         
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.DrawLine(upRight, upLeft);
         Gizmos.DrawLine(upLeft, downLeft);
