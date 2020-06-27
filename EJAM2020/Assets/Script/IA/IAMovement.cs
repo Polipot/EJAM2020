@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance }
+public enum Action { None, Move, Flee, Attack, Dance, Dead }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
 {
+    public bool Die;
+
     [Header("Piece")]
     public aRoom actualRoom;
 
+    [Header("Temps")]
     float MoveTime;
     float MoveLatence;
+
+    [Header("Surveillance")]
+    public int PortéeSurveillance;
 
     RoomManager RM;
 
@@ -35,39 +41,58 @@ public class IAMovement : MonoBehaviour
         RandomChangeRoom();
 
         MoveLatence = Random.Range(7f, 20f);
+
+        switch (myType)
+        {
+            case Type.Civilian:
+                PortéeSurveillance = 0;
+                break;
+            case Type.Guard:
+                PortéeSurveillance = 6;
+                break;               
+            case Type.Policeman:
+                PortéeSurveillance = 10;
+                break;
+            default:
+                break;
+        }
+        transform.GetChild(1).localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(myAction != Action.Dead)
         {
-            Fuite();
-        }
-
-        if(myAction == Action.None || myAction == Action.Dance)
-        {
-            MoveTime += Time.deltaTime;
-            if(MoveTime >= MoveLatence)
+            if (Die == true)
             {
-                MoveTime = 0;
-                RandomChangeRoom();
+                Mort();
             }
-        }
 
-        else if(myAction == Action.Move || myAction == Action.Flee)
-        {
-            if(myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
+            if (myAction == Action.None || myAction == Action.Dance)
             {
-                if(actualRoom.Actions_Spéciales.Count == 0)
+                MoveTime += Time.deltaTime;
+                if (MoveTime >= MoveLatence)
                 {
-                    myAction = Action.None;
-                    myAnimator.SetTrigger("StopMovement");
+                    MoveTime = 0;
+                    RandomChangeRoom();
                 }
-                else
+            }
+
+            else if (myAction == Action.Move || myAction == Action.Flee)
+            {
+                if (myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
                 {
-                    myAction = actualRoom.Actions_Spéciales[0];
-                    myAnimator.SetTrigger("Dance");
+                    if (actualRoom.Actions_Spéciales.Count == 0 || myType != Type.Civilian)
+                    {
+                        myAction = Action.None;
+                        myAnimator.SetTrigger("StopMovement");
+                    }
+                    else
+                    {
+                        myAction = actualRoom.Actions_Spéciales[0];
+                        myAnimator.SetTrigger("Dance");
+                    }
                 }
             }
         }
@@ -99,7 +124,22 @@ public class IAMovement : MonoBehaviour
         {
             myNavMesh.SetDestination(new Vector3(Random.Range(theRoom.downLeft.x, theRoom.downRight.x), 0, Random.Range(theRoom.downLeft.z, theRoom.upLeft.z)));
 
-            actualRoom = theRoom;
+            if(actualRoom != theRoom)
+            {
+                if(actualRoom != null)
+                {
+                    actualRoom.Population.Remove(this);
+                }
+
+                actualRoom = theRoom;
+
+                if (!theRoom.Population.ContainsKey(this))
+                {
+                    theRoom.Population.Add(this, gameObject.name);
+                }
+            }
+
+
             if (isFuite == false)
             {
                 myAction = Action.Move;
@@ -111,17 +151,32 @@ public class IAMovement : MonoBehaviour
                 myNavMesh.speed = 5f;
                 myAnimator.SetTrigger("Run");
                 myAction = Action.Flee;               
-            }
-
-            if (!theRoom.Population.ContainsKey(this))
-            {
-                theRoom.Population.Add(this, gameObject.name);
-            }
+            }           
         }
     }
 
     void Fuite()
     {
         RandomChangeRoom(true);
+    }
+
+    void Mort()
+    {
+        myAction = Action.Dead;
+
+        List<IAMovement> theEnnemies = new List<IAMovement>();
+
+        foreach (IAMovement item in actualRoom.Population.Keys)
+        {
+            theEnnemies.Add(item);
+        }
+
+        for (int i = 0; i < theEnnemies.Count; i++)
+        {
+            if (theEnnemies[i] != this)
+            {
+                theEnnemies[i].Fuite();
+            }
+        }
     }
 }
