@@ -26,7 +26,7 @@ public class IAMovement : MonoBehaviour
 
     [Header("Surveillance")]
     public int PortéeSurveillance;
-    GameObject Radar;
+    public GameObject Radar;
     public LayerMask PoursuiteLayer;
 
     RoomManager RM;
@@ -65,6 +65,7 @@ public class IAMovement : MonoBehaviour
         }
         Radar = transform.GetChild(1).gameObject;
         Radar.transform.localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
+        Radar.GetComponent<SpriteRenderer>().color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, Radar.GetComponent<SpriteRenderer>().color.a);
         GetComponentInChildren<aSkin>().LoadSkin(this);
         Actif = true;
     }
@@ -264,21 +265,24 @@ public class IAMovement : MonoBehaviour
                 {
                     theEnnemies[i].Fuite();
                 }
-                else if(theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
+                else 
                 {
                     NotSeen = false;
-                    theEnnemies[i].Found();
+                    if (theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
+                    {
+                        theEnnemies[i].Found();
+                    }                                            
                 }
             }
         }
 
         if (Lethal && myType == Type.Civilian)
         {
-            if (NotSeen)
+            if (NotSeen && IAM.theRedAlert)
             {
-                // transformation
+                IAM.EndAlert();
             }
-            else
+            else if (!NotSeen && !IAM.theRedAlert)
             {
                 IAM.RedAlert();
             }
