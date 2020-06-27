@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class aSkin : MonoBehaviour
 {
@@ -72,6 +73,24 @@ public class aSkin : MonoBehaviour
             BrasGauche.sprite = Resources.Load<Sprite>("Skins/Guard/Bras");
             MainDroite.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
+        }
+
+        else if(theIA.myType == Type.Civilian)
+        {
+            DirectoryInfo dir = new DirectoryInfo("Assets/Resources/Skins/Civil");
+            DirectoryInfo[] info = dir.GetDirectories("*.*");
+            int count = dir.GetDirectories().Length;
+
+            int rnd = Random.Range(1, count + 1);
+
+            Corps.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Corps");
+            Tête.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Tête");
+            EpauleDroite.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Epaule");
+            EpauleGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Epaule");
+            BrasDroit.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Bras");
+            BrasGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Bras");
+            MainDroite.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
+            MainGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
         }
     }
 }

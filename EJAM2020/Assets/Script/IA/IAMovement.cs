@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance, Dead }
+public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
@@ -64,11 +64,6 @@ public class IAMovement : MonoBehaviour
     {
         if(myAction != Action.Dead)
         {
-            if (Die == true)
-            {
-                Mort();
-            }
-
             if (myAction == Action.None || myAction == Action.Dance)
             {
                 MoveTime += Time.deltaTime;
@@ -76,6 +71,16 @@ public class IAMovement : MonoBehaviour
                 {
                     MoveTime = 0;
                     RandomChangeRoom();
+                }
+            }
+
+            else if(myAction == Action.Paralysed)
+            {
+                MoveTime += Time.deltaTime;
+                if(MoveTime >= 1)
+                {
+                    MoveTime = 0;
+                    Fuite();
                 }
             }
 
@@ -160,9 +165,13 @@ public class IAMovement : MonoBehaviour
         RandomChangeRoom(true);
     }
 
-    void Mort()
+    void Hited(Vector3 HitingEntity, bool Lethal = false)
     {
-        myAction = Action.Dead;
+        myNavMesh.enabled = false;
+        Vector3 Direction = HitingEntity - transform.position;
+        MoveTime = 0;
+        myAction = Action.Paralysed;
+        myAnimator.SetTrigger("Hited");
 
         List<IAMovement> theEnnemies = new List<IAMovement>();
 
@@ -173,10 +182,24 @@ public class IAMovement : MonoBehaviour
 
         for (int i = 0; i < theEnnemies.Count; i++)
         {
-            if (theEnnemies[i] != this)
+            if (theEnnemies[i].myType == Type.Civilian)
             {
                 theEnnemies[i].Fuite();
             }
+            else
+            {
+                // Poursuite;
+            }
         }
+
+        if (Lethal)
+        {
+            Mort();
+        }
+    }
+
+    void Mort()
+    {
+        myAction = Action.Dead;
     }
 }
