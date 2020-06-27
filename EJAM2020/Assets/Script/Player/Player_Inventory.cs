@@ -1,69 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_Inventory : MonoBehaviour
 {
     GameObject currentlyItem;
 
     public Transform ParentForItem;
+    public Text Dialogue_text;
 
-    private void Awake()
-    {
-    }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Item") && Input.GetAxis("Interaction") > 0)
+        if (other.CompareTag("Item"))
         {
-            Item it =other.GetComponent<Item>();
-            if (it != null)
+            Dialogue_text.text = "Press E to take it";
+
+            if (Input.GetAxis("Interaction") > 0)
             {
-
-                if (currentlyItem != null)
+                Item it = other.GetComponent<Item>();
+                if (it != null)
                 {
-                    drop(currentlyItem);
+
+                    if (currentlyItem != null)
+                    {
+                        drop(currentlyItem);
+                    }
+
+                    GetNewItem(other.gameObject);
+
+                    other.enabled = false;
+                    Dialogue_text.text = "";
                 }
-
-                GetNewItem(other.gameObject);
-
-                other.enabled = false;
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            Dialogue_text.text = "";
         }
     }
 
     void drop(GameObject dropIt)
     {
         currentlyItem.transform.SetParent(null);
-        currentlyItem.GetComponent<Item>().DropOrGet(false);
+        currentlyItem.GetComponent<Item>().DropOrGet(false, null);
         dropIt.GetComponent<Collider>().enabled = true;
     }
 
     void GetNewItem(GameObject tt)
     {
         currentlyItem = tt;
-        tt.GetComponent<Item>().DropOrGet(true);
+        tt.GetComponent<Item>().DropOrGet(true, transform);
         tt.transform.SetParent(ParentForItem);
         tt.transform.position = ParentForItem.position;
     }
 }
-
-/*
- * 
- *         Weapons[0].SetActive(true);
-
- *     Dictionary<string, int> AllItems = new Dictionary<string, int>()
-    {
-        { "rien", 0 },
-        { "Bulle", 1 },
-        { "Tete", 2 },
-    };
-    public GameObject[] Weapons;
- *
- * 
- *         for (int i = 0; i < Weapons.Length; i++)
-        {
-            Weapons[i].SetActive(false);
-        }
-        Weapons[AllItems[type]].SetActive(true);
- * */
