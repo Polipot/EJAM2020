@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player_life : MonoBehaviour
+public class Player_life : Singleton<Player_life>
 {
-    public bool test;
+    public Transform CarHere = null;
+    public Transform PointToCar;
 
     private void Update()
     {
-        if (test)
+        if (CarHere != null)
         {
-            Hited();
+            PointToCar.gameObject.SetActive(true);
+            PointToCar.LookAt(CarHere);
         }
     }
 
     public void Hited()
     {
         Debug.Log("PLAYER IS DEAD ");
-        test = false;
+    }
+
+    public void GetCar(Transform car)
+    {
+        CarHere = car;
     }
 }
