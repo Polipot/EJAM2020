@@ -53,10 +53,17 @@ public class Player_bulle : MonoBehaviour
         Debug.DrawRay(it.Player.position, it.Player.forward);
         if (Physics.Raycast(it.Player.position, it.Player.forward, out hit, 2f))
         {
-            Debug.Log(hit.collider.gameObject);
-            Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
-            //hit.collider.transform.Translate(dir);
-            hit.collider.GetComponent<Rigidbody>().AddForce(dir * ForceMax, ForceMode.Impulse);
+            if (hit.collider.GetComponent<IAMovement>() != null)
+            {
+                Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
+
+                hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
+
+                if (hit.collider.GetComponent<Rigidbody>() != null)
+                {
+                    hit.collider.GetComponent<Rigidbody>().AddForce(dir * ForceMax, ForceMode.Impulse);
+                }
+            }
         }
     }
 }

@@ -58,5 +58,6 @@ public class Player_Inventory : MonoBehaviour
         tt.GetComponent<Item>().DropOrGet(true, transform);
         tt.transform.SetParent(ParentForItem);
         tt.transform.position = ParentForItem.position;
+        tt.transform.localEulerAngles = new Vector3(0,0,0);
     }
 }

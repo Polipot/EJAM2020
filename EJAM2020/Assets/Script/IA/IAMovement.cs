@@ -165,7 +165,7 @@ public class IAMovement : MonoBehaviour
         RandomChangeRoom(true);
     }
 
-    void Hited(Vector3 HitingEntity, bool Lethal = false)
+    public void Hited(Vector3 HitingEntity, bool Lethal = false)
     {
         myNavMesh.enabled = false;
         Vector3 Direction = HitingEntity - transform.position;
