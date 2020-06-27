@@ -18,9 +18,10 @@ public class Player_Movement : MonoBehaviour
         LookMouse();
     }
 
+
     private void Move()
     {
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * Speed, 0, Input.GetAxis("Vertical") * Speed);
+        rb.velocity = new Vector3(Input.GetAxis("Horizontal")* Speed, 0, Input.GetAxis("Vertical") * Speed);
     }
 
     void LookMouse()
