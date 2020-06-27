@@ -20,25 +20,24 @@ public class Player_Inventory : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && temp != null)
         {
-
-            if (Input.GetKeyDown(KeyCode.E))
+            Item it = temp.GetComponent<Item>();
+            if (it != null)
             {
-                Item it = temp.GetComponent<Item>();
-                if (it != null)
+
+                if (currentlyItem != null)
                 {
-
-                    if (currentlyItem != null)
-                    {
-                        drop(currentlyItem);
-                    }
-
-                    GetNewItem(temp.gameObject);
-
-                    temp.GetComponent<Collider>().enabled = false;
-                    Dialogue_text.text = "";
+                    drop(currentlyItem);
                 }
+
+                GetNewItem(temp.gameObject);
+
+                temp.GetComponent<Collider>().enabled = false;
+                Dialogue_text.text = "";
+
+                temp = null;
+                it = null;
             }
         }
     }
@@ -48,7 +47,7 @@ public class Player_Inventory : MonoBehaviour
         temp = tp;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item"))
         {
@@ -63,6 +62,7 @@ public class Player_Inventory : MonoBehaviour
         if (other.CompareTag("Item"))
         {
             Dialogue_text.text = "";
+            GetItemGround(null);
         }
     }
 

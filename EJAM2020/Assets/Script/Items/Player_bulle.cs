@@ -53,6 +53,8 @@ public class Player_bulle : MonoBehaviour
         {
             if (hit.collider.GetComponent<IAMovement>() != null)
             {
+                CameraShake.Instance.ShakeIt();
+
                 Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
 
                 hit.collider.GetComponent<IAMovement>().Hited(transform.position, false);
