@@ -9,6 +9,7 @@ public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
 {
+    IAManager IAM;
     Player_Movement PM;
     bool Actif;
     [HideInInspector]
@@ -25,7 +26,7 @@ public class IAMovement : MonoBehaviour
 
     [Header("Surveillance")]
     public int PortéeSurveillance;
-
+    GameObject Radar;
     public LayerMask PoursuiteLayer;
 
     RoomManager RM;
@@ -42,6 +43,7 @@ public class IAMovement : MonoBehaviour
         myAnimator = GetComponentInChildren<Animator>();
         RM = RoomManager.Instance;
         PM = Player_Movement.Instance;
+        IAM = IAManager.Instance;
 
         RandomChangeRoom();
 
@@ -61,7 +63,8 @@ public class IAMovement : MonoBehaviour
             default:
                 break;
         }
-        transform.GetChild(1).localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
+        Radar = transform.GetChild(1).gameObject;
+        Radar.transform.localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
         GetComponentInChildren<aSkin>().LoadSkin(this);
         Actif = true;
     }
@@ -162,6 +165,8 @@ public class IAMovement : MonoBehaviour
 
                 if( myType != Type.Civilian)
                 {
+                    UpdateRadar();
+
                     if(myAction != Action.Attack && myAction != Action.Found)
                     {
                         Watchout();
@@ -273,6 +278,10 @@ public class IAMovement : MonoBehaviour
             {
                 // transformation
             }
+            else
+            {
+                IAM.RedAlert();
+            }
 
             Mort();
         }
@@ -332,5 +341,17 @@ public class IAMovement : MonoBehaviour
         MoveTime = 0;
         myAction = Action.Lost;
         myAnimator.SetTrigger("Found");
+    }
+
+    void UpdateRadar()
+    {
+        if(IAM.theRedAlert && Radar.transform.localScale.x < PortéeSurveillance)
+        {
+            Radar.transform.localScale = new Vector3(Radar.transform.localScale.x + 0.01f, Radar.transform.localScale.y + 0.01f, 1);
+        }
+        else if (!IAM.theRedAlert && Radar.transform.localScale.x > PortéeSurveillance)
+        {
+            Radar.transform.localScale = new Vector3(Radar.transform.localScale.x - 0.01f, Radar.transform.localScale.y - 0.01f, 1);
+        }
     }
 }

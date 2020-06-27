@@ -25,6 +25,10 @@ public class IAManager : Singleton<IAManager>
     public Text TargetCount_t;
     public GameObject[] Portraits;
 
+    [Header("Surveillance")]
+    public string KnownPath;
+    public bool theRedAlert;
+
     void Awake()
     {
         if (Instance != this)
@@ -116,6 +120,19 @@ public class IAManager : Singleton<IAManager>
                 {
                     Portraits[x].SetActive(true);
                 }
+            }
+        }
+    }
+
+    public void RedAlert()
+    {
+        theRedAlert = true;
+
+        for (int i = 0; i < Population.Count; i++)
+        {
+            if(Population[i].myType != Type.Civilian)
+            {
+                Population[i].PortéeSurveillance += 2;
             }
         }
     }
