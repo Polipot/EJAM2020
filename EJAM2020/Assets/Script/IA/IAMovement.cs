@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +11,8 @@ public class IAMovement : MonoBehaviour
 {
     Player_Movement PM;
     bool Actif;
+    [HideInInspector]
+    public string SkinChemin;
 
     public bool IsTarget;
 
@@ -120,7 +123,7 @@ public class IAMovement : MonoBehaviour
                 {
                     myNavMesh.SetDestination(PM.gameObject.transform.position);
                     Vector3 Direction = (PM.transform.position - transform.position).normalized;
-                    RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, 100, PoursuiteLayer);
+                    RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, 100, PoursuiteLayer).OrderBy(h => h.distance).ToArray(); ;
 
                     for (int i = 0; i < ToPlayer.Length; i++)
                     {
@@ -246,6 +249,8 @@ public class IAMovement : MonoBehaviour
             theEnnemies.Add(item);
         }
 
+        bool NotSeen = true;
+
         for (int i = 0; i < theEnnemies.Count; i++)
         {
             if(theEnnemies[i] != this && theEnnemies[i].myAction != Action.Paralysed && Vector3.Distance(transform.position, theEnnemies[i].transform.position) <= 10)
@@ -256,13 +261,19 @@ public class IAMovement : MonoBehaviour
                 }
                 else if(theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
                 {
+                    NotSeen = false;
                     theEnnemies[i].Found();
                 }
             }
         }
 
-        if (Lethal)
+        if (Lethal && myType == Type.Civilian)
         {
+            if (NotSeen)
+            {
+                // transformation
+            }
+
             Mort();
         }
     }
@@ -289,7 +300,7 @@ public class IAMovement : MonoBehaviour
     public void Watchout()
     {
         Vector3 Direction = (PM.transform.position - transform.position).normalized;
-        RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, PortéeSurveillance / 2, PoursuiteLayer);
+        RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, PortéeSurveillance / 2, PoursuiteLayer).OrderBy(h => h.distance).ToArray();
 
         for (int i = 0; i < ToPlayer.Length; i++)
         {            

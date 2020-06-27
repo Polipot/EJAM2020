@@ -69,6 +69,8 @@ public class aSkin : MonoBehaviour
             BrasGauche.sprite = Resources.Load<Sprite>("Skins/Guard/Bras");
             MainDroite.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
+
+            theIA.SkinChemin = "Skins/Guard/Main";
         }
 
         else if(theIA.myType == Type.Civilian)
@@ -87,6 +89,8 @@ public class aSkin : MonoBehaviour
             BrasGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Bras");
             MainDroite.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
+
+            theIA.SkinChemin = "Skins/Civil/Civil_" + rnd + "/Main";
         }
     }
 }
