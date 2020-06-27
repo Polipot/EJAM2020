@@ -37,8 +37,6 @@ public class Player_knife : MonoBehaviour
 
     void JETIRE()
     {
-        Debug.Log("JE TIRE " + gameObject.name);
-
         RaycastHit hit;
         Debug.DrawRay(it.Player.position, it.Player.forward);
         if (Physics.Raycast(it.Player.position, it.Player.forward, out hit, 1f))

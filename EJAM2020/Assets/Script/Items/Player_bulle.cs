@@ -43,8 +43,6 @@ public class Player_bulle : MonoBehaviour
 
     void JETIRE()
     {
-        Debug.Log("JE TIRE " + gameObject.name);
-
         var bb = (GameObject)Instantiate(Resources.Load("Particles/Particle_bulle"), it.Player.position, it.Player.rotation);
         bb.transform.SetParent(it.Player.transform);
         Destroy(bb, 5f);
@@ -57,7 +55,7 @@ public class Player_bulle : MonoBehaviour
             {
                 Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
 
-                hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
+                hit.collider.GetComponent<IAMovement>().Hited(transform.position, false);
 
                 if (hit.collider.GetComponent<Rigidbody>() != null)
                 {

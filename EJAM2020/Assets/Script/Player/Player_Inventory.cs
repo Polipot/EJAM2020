@@ -9,7 +9,13 @@ public class Player_Inventory : MonoBehaviour
 
     public Transform ParentForItem;
     public Text Dialogue_text;
+    public Text Name_text;
 
+    private void FixedUpdate()
+    {
+        if (currentlyItem != null)
+            Name_text.text = currentlyItem.name;
+    }
 
     private void OnTriggerStay(Collider other)
     {
