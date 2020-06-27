@@ -23,7 +23,7 @@ public class Player_Inventory : MonoBehaviour
         {
             Dialogue_text.text = "Press E to take it";
 
-            if (Input.GetAxis("Interaction") > 0)
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 Item it = other.GetComponent<Item>();
                 if (it != null)

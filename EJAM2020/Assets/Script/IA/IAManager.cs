@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IAManager : MonoBehaviour
 {
@@ -12,18 +13,27 @@ public class IAManager : MonoBehaviour
     [Header("Temps")]
     [HideInInspector]
     public float TempsNouveauxArrivants;
+    [Range(10, 150)]
     public int LimitePopulation;
     public int PersonnesPourUnGarde;
     public float LatenceNouveauxArrivants;
 
-    // Update is called once per frame
+    [Header("Targets")]
+    [Range(0, 4)]
+    public int Limite_target;
+    public List<IAMovement> Targets_;
+    public Text TargetCount_t;
+    public GameObject[] Portraits;
+
     void Start()
     {
         int a = 0;
 
         for (int i = 0; i < LimitePopulation; i++)
         {
-            GameObject anAI = (GameObject)Instantiate(Resources.Load<GameObject>("Prefabs/IA"), Vector3.zero, transform.rotation);
+            GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
+                Vector3.zero, transform.rotation);
+
             IAMovement theMovement = anAI.GetComponent<IAMovement>();
             if (a >= PersonnesPourUnGarde)
             {
@@ -32,8 +42,27 @@ public class IAManager : MonoBehaviour
             }
             else
             {
+                if (i % 2 == 1 && Limite_target > 0)
+                {
+                    theMovement.IsTarget = true;
+                    Targets_.Add(theMovement);
+                    Limite_target--;
+                    //Debug.Log("IM A TARGET");
+                }
                 theMovement.myType = Type.Civilian;
             }
+
+            if (Portraits.Length > 0)
+            {
+                for (int x = 0; x < Portraits.Length; x++)
+                {
+                    if (x < Targets_.Count)
+                    {
+                        Portraits[x].SetActive(true);
+                    }
+                }
+            }
+
 
             theMovement.Activation();
             Population.Add(theMovement);
@@ -64,5 +93,10 @@ public class IAManager : MonoBehaviour
 
             Population = Survivants;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        TargetCount_t.text = Targets_.Count.ToString();
     }
 }

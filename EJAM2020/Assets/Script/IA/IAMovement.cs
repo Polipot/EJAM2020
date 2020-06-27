@@ -11,6 +11,8 @@ public class IAMovement : MonoBehaviour
     Player_Movement PM;
     bool Actif;
 
+    public bool IsTarget;
+
     [Header("Piece")]
     public aRoom actualRoom;
 
