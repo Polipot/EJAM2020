@@ -227,6 +227,7 @@ public class IAMovement : MonoBehaviour
 
     void Mort()
     {
+        IAManager.Instance.NeedsToUpdate = true;
         myAction = Action.Dead;
     }
 

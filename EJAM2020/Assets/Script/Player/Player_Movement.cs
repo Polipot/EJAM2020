@@ -10,9 +10,7 @@ public class Player_Movement : Singleton<Player_Movement>
     void Awake()
     {
         if (Instance != this)
-        {
             Destroy(gameObject);
-        }
 
         rb = GetComponent<Rigidbody>();
     }

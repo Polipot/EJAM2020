@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IAManager : MonoBehaviour
+public class IAManager : Singleton<IAManager>
 {
     [HideInInspector]
     public bool NeedsToUpdate;
@@ -25,8 +25,12 @@ public class IAManager : MonoBehaviour
     public Text TargetCount_t;
     public GameObject[] Portraits;
 
-    void Start()
+    void Awake()
     {
+        if (Instance != this)
+            Destroy(gameObject);
+
+
         int a = 0;
 
         for (int i = 0; i < LimitePopulation; i++)
@@ -48,21 +52,15 @@ public class IAManager : MonoBehaviour
                     Targets_.Add(theMovement);
                     Limite_target--;
                     //Debug.Log("IM A TARGET");
+
+                    var p = (GameObject)Instantiate(Resources.Load("Particles/HERE"), anAI.transform);
+                    p.transform.position = anAI.transform.position;
+
                 }
                 theMovement.myType = Type.Civilian;
             }
 
-            if (Portraits.Length > 0)
-            {
-                for (int x = 0; x < Portraits.Length; x++)
-                {
-                    if (x < Targets_.Count)
-                    {
-                        Portraits[x].SetActive(true);
-                    }
-                }
-            }
-
+            RefreshPortraits();
 
             theMovement.Activation();
             Population.Add(theMovement);
@@ -75,7 +73,7 @@ public class IAManager : MonoBehaviour
     {
         if(NeedsToUpdate)
         {
-            NeedsToUpdate = true;
+            NeedsToUpdate = false;
 
             List<IAMovement> Survivants = new List<IAMovement>();
 
@@ -87,7 +85,10 @@ public class IAManager : MonoBehaviour
                 }
                 else
                 {
+                    Targets_.Remove(Population[i]);
                     Destroy(Population[i].gameObject);
+
+                    RefreshPortraits();
                 }
             }
 
@@ -97,6 +98,25 @@ public class IAManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        TargetCount_t.text = Targets_.Count.ToString();
+        if (TargetCount_t != null)
+        {
+            TargetCount_t.text = Targets_.Count.ToString();
+        }
+    }
+
+    void RefreshPortraits()
+    {
+        if (Portraits.Length > 0)
+        {
+            for (int x = 0; x < Portraits.Length; x++)
+            {
+                Portraits[x].SetActive(false);
+
+                if (x < Targets_.Count)
+                {
+                    Portraits[x].SetActive(true);
+                }
+            }
+        }
     }
 }
