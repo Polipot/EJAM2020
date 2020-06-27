@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found }
+public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found, Lost }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
@@ -22,6 +22,8 @@ public class IAMovement : MonoBehaviour
 
     [Header("Surveillance")]
     public int PortéeSurveillance;
+
+    public LayerMask PoursuiteLayer;
 
     RoomManager RM;
 
@@ -89,6 +91,17 @@ public class IAMovement : MonoBehaviour
                     }
                 }
 
+                else if (myAction == Action.Lost)
+                {
+                    MoveTime += Time.deltaTime;
+                    if (MoveTime >= 2)
+                    {
+                        MoveTime = 0;
+                        myNavMesh.enabled = true;
+                        RandomChangeRoom(false);
+                    }
+                }
+
                 else if (myAction == Action.Found)
                 {
                     MoveTime += Time.deltaTime;
@@ -104,6 +117,22 @@ public class IAMovement : MonoBehaviour
                 else if (myAction == Action.Attack)
                 {
                     myNavMesh.SetDestination(PM.gameObject.transform.position);
+                    Vector3 Direction = (PM.transform.position - transform.position).normalized;
+                    RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, 100, PoursuiteLayer);
+                    for (int i = 0; i < ToPlayer.Length; i++)
+                    {
+                        if (ToPlayer[i].collider.tag.Equals("Wall"))
+                        {
+                            // a perdu la trace du joueur
+                            LostInPursuit();
+                            break;
+                        }
+                        else if (ToPlayer[i].collider.tag.Equals("Joueur"))
+                        {
+                            // a toujours le joueur en vue
+                            break;
+                        }
+                    }
                 }
 
                 else if (myAction == Action.Move || myAction == Action.Flee)
@@ -250,5 +279,13 @@ public class IAMovement : MonoBehaviour
         myNavMesh.speed = 5f;
         myAnimator.SetTrigger("Run");
         myAction = Action.Attack;
+    }
+
+    public void LostInPursuit()
+    {
+        myNavMesh.enabled = false;
+        MoveTime = 0;
+        myAction = Action.Lost;
+        myAnimator.SetTrigger("Found");
     }
 }
