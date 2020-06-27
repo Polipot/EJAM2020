@@ -17,6 +17,7 @@ public class IAMovement : MonoBehaviour
     RoomManager RM;
 
     NavMeshAgent myNavMesh;
+    Animator myAnimator;
 
     public Action myAction;
     public Type myType;
@@ -25,6 +26,7 @@ public class IAMovement : MonoBehaviour
     void Awake()
     {
         myNavMesh = GetComponent<NavMeshAgent>();
+        myAnimator = GetComponentInChildren<Animator>();
         RM = RoomManager.Instance;
     }
 
@@ -38,6 +40,11 @@ public class IAMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Fuite();
+        }
+
         if(myAction == Action.None)
         {
             MoveTime += Time.deltaTime;
@@ -48,20 +55,21 @@ public class IAMovement : MonoBehaviour
             }
         }
 
-        else if(myAction == Action.Move)
+        else if(myAction == Action.Move || myAction == Action.Flee)
         {
-            if(myNavMesh.desiredVelocity.magnitude == 0)
+            if(myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
             {
                 myAction = Action.None;
+                myAnimator.SetTrigger("StopMovement");
             }
         }
     }
 
-    void RandomChangeRoom()
+    void RandomChangeRoom(bool isFuite = false)
     {
         aRoom theRoom = null;
 
-        if(actualRoom != null && (Random.Range(0, 4) > 0))
+        if(actualRoom != null && (Random.Range(0, 4) > 0) && isFuite == false)
         {
             theRoom = actualRoom;
         }
@@ -77,18 +85,35 @@ public class IAMovement : MonoBehaviour
 
         if(theRoom == null)
         {
-            RandomChangeRoom();
+            RandomChangeRoom(isFuite);
         }
         else
         {
-            actualRoom = theRoom;
-            myAction = Action.Move;
             myNavMesh.SetDestination(new Vector3(Random.Range(theRoom.downLeft.x, theRoom.downRight.x), 0, Random.Range(theRoom.downLeft.z, theRoom.upLeft.z)));
+
+            actualRoom = theRoom;
+            if (isFuite == false)
+            {
+                myAction = Action.Move;
+                myAnimator.SetTrigger("Walk");
+                myNavMesh.speed = 1.5f;                
+            }
+            else
+            {
+                myNavMesh.speed = 5f;
+                myAnimator.SetTrigger("Run");
+                myAction = Action.Flee;               
+            }
 
             if (!theRoom.Population.ContainsKey(this))
             {
                 theRoom.Population.Add(this, gameObject.name);
             }
         }
+    }
+
+    void Fuite()
+    {
+        RandomChangeRoom(true);
     }
 }
