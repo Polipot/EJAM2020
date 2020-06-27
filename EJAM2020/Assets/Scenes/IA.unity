@@ -857,8 +857,8 @@ MonoBehaviour:
   NeedsToUpdate: 0
   Population: []
   TempsNouveauxArrivants: 0
-  LimitePopulation: 40
-  PersonnesPourUnGarde: 5
+  LimitePopulation: 15
+  PersonnesPourUnGarde: 14
   LatenceNouveauxArrivants: 0
   Limite_target: 0
   Targets_: []

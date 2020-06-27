@@ -127,12 +127,14 @@ public class IAMovement : MonoBehaviour
                         if (ToPlayer[i].collider.tag.Equals("Player"))
                         {
                             // a toujours le joueur en vue
+                            Debug.Log("Player");
                             break;
                         }
                         else if (ToPlayer[i].collider.tag.Equals("Wall"))
                         {
                             // a perdu la trace du joueur
                             LostInPursuit();
+                            Debug.Log("Wall");
                             break;
                         }
                     }
@@ -152,6 +154,14 @@ public class IAMovement : MonoBehaviour
                             myAction = actualRoom.Actions_Spéciales[0];
                             myAnimator.SetTrigger("Dance");
                         }
+                    }
+                }
+
+                if( myType != Type.Civilian)
+                {
+                    if(myAction != Action.Attack && myAction != Action.Found)
+                    {
+                        Watchout();
                     }
                 }
             }
@@ -274,6 +284,27 @@ public class IAMovement : MonoBehaviour
         MoveTime = 0;
         myAction = Action.Found;
         myAnimator.SetTrigger("Found");
+    }
+
+    public void Watchout()
+    {
+        Vector3 Direction = (PM.transform.position - transform.position).normalized;
+        RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, PortéeSurveillance / 2, PoursuiteLayer);
+
+        for (int i = 0; i < ToPlayer.Length; i++)
+        {            
+            if (ToPlayer[i].collider.tag.Equals("Wall"))
+            {
+                // a perdu la trace du joueur
+                break;
+            }
+            else if (ToPlayer[i].collider.tag.Equals("Player"))
+            {
+                Found();
+                // a toujours le joueur en vue
+                break;
+            }
+        }
     }
 
     public void StartPursuit()
