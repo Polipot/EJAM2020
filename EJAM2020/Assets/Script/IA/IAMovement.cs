@@ -227,6 +227,11 @@ public class IAMovement : MonoBehaviour
 
     void Mort()
     {
+        if (actualRoom != null)
+        {
+            actualRoom.Population.Remove(this);
+        }
+
         IAManager.Instance.NeedsToUpdate = true;
         myAction = Action.Dead;
     }
