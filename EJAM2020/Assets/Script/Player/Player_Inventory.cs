@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Inventory : MonoBehaviour
 {
-    GameObject CurrentlyItem;
+    GameObject currentlyItem;
 
     public Transform ParentForItem;
 
@@ -20,9 +20,9 @@ public class Player_Inventory : MonoBehaviour
             if (it != null)
             {
 
-                if (CurrentlyItem != null)
+                if (currentlyItem != null)
                 {
-                    drop(CurrentlyItem);
+                    drop(currentlyItem);
                 }
 
                 GetNewItem(other.gameObject);
@@ -34,13 +34,15 @@ public class Player_Inventory : MonoBehaviour
 
     void drop(GameObject dropIt)
     {
-        CurrentlyItem.transform.SetParent(null);
+        currentlyItem.transform.SetParent(null);
+        currentlyItem.GetComponent<Item>().DropOrGet(false);
         dropIt.GetComponent<Collider>().enabled = true;
     }
 
     void GetNewItem(GameObject tt)
     {
-        CurrentlyItem = tt;
+        currentlyItem = tt;
+        tt.GetComponent<Item>().DropOrGet(true);
         tt.transform.SetParent(ParentForItem);
         tt.transform.position = ParentForItem.position;
     }

@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera_follow : MonoBehaviour
+public class Camera_follow : Singleton<Camera_follow>
 {
     [Range(0, 20)]
     public float smothness;
     public Transform target;
+
+    private void Awake()
+    {
+        if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void FixedUpdate()
     {

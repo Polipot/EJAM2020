@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public enum ItemID
-    {
-        rien,
-        Bulle,
-        Tete
-    };
+    public bool OnPlayer = false;
 
-    public ItemID ItID;
+    public void DropOrGet(bool val)
+    {
+        OnPlayer = val;
+    }
 }

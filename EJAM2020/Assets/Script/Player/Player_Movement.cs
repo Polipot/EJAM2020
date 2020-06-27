@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Movement : MonoBehaviour
+public class Player_Movement : Singleton<Player_Movement>
 {
     Rigidbody rb;
     public float Speed;
 
     void Awake()
     {
+        if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
         rb = GetComponent<Rigidbody>();
     }
 
