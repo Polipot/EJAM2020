@@ -132,7 +132,22 @@ public class IAManager : Singleton<IAManager>
         {
             if(Population[i].myType != Type.Civilian)
             {
+                Population[i].Radar.GetComponent<SpriteRenderer>().color = new Color(Color.red.r, Color.red.g, Color.red.b , Population[i].Radar.GetComponent<SpriteRenderer>().color.a);
                 Population[i].PortéeSurveillance += 2;
+            }
+        }
+    }
+
+    public void EndAlert()
+    {
+        theRedAlert = false;
+
+        for (int i = 0; i < Population.Count; i++)
+        {
+            if (Population[i].myType != Type.Civilian)
+            {
+                Population[i].Radar.GetComponent<SpriteRenderer>().color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, Population[i].Radar.GetComponent<SpriteRenderer>().color.a);
+                Population[i].PortéeSurveillance -= 2;
             }
         }
     }
