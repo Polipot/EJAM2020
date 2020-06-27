@@ -48,11 +48,6 @@ public class aSkin : MonoBehaviour
         }
 
         myIA = GetComponentInParent<IAMovement>();
-
-        if(myIA != null)
-        {
-            LoadSkin(myIA);
-        }
     }
 
     // Update is called once per frame
@@ -61,7 +56,7 @@ public class aSkin : MonoBehaviour
         
     }
 
-    void LoadSkin(IAMovement theIA)
+    public void LoadSkin(IAMovement theIA)
     {
         if(theIA.myType == Type.Guard)
         {

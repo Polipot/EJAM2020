@@ -9,6 +9,7 @@ public enum Type { Civilian, Guard, Policeman }
 public class IAMovement : MonoBehaviour
 {
     Player_Movement PM;
+    bool Actif;
 
     [Header("Piece")]
     public aRoom actualRoom;
@@ -28,17 +29,13 @@ public class IAMovement : MonoBehaviour
     public Action myAction;
     public Type myType;
 
-    // Start is called before the first frame update
-    void Awake()
+    public void Activation()
     {
         myNavMesh = GetComponent<NavMeshAgent>();
         myAnimator = GetComponentInChildren<Animator>();
         RM = RoomManager.Instance;
         PM = Player_Movement.Instance;
-    }
 
-    private void Start()
-    {
         RandomChangeRoom();
 
         MoveLatence = Random.Range(7f, 20f);
@@ -50,7 +47,7 @@ public class IAMovement : MonoBehaviour
                 break;
             case Type.Guard:
                 PortéeSurveillance = 6;
-                break;               
+                break;
             case Type.Policeman:
                 PortéeSurveillance = 10;
                 break;
@@ -58,64 +55,69 @@ public class IAMovement : MonoBehaviour
                 break;
         }
         transform.GetChild(1).localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
+        GetComponentInChildren<aSkin>().LoadSkin(this);
+        Actif = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(myAction != Action.Dead)
+        if (Actif)
         {
-            if (myAction == Action.None || myAction == Action.Dance)
+            if (myAction != Action.Dead)
             {
-                MoveTime += Time.deltaTime;
-                if (MoveTime >= MoveLatence)
+                if (myAction == Action.None || myAction == Action.Dance)
                 {
-                    MoveTime = 0;
-                    RandomChangeRoom();
-                }
-            }
-
-            else if(myAction == Action.Paralysed)
-            {
-                MoveTime += Time.deltaTime;
-                if(MoveTime >= 1)
-                {
-                    MoveTime = 0;
-                    myNavMesh.enabled = true;
-                    Fuite();
-                }
-            }
-
-            else if(myAction == Action.Found)
-            {
-                MoveTime += Time.deltaTime;
-                transform.LookAt(new Vector3(PM.gameObject.transform.position.x, transform.position.y, PM.gameObject.transform.position.z));
-                if (MoveTime >= 1)
-                {
-                    MoveTime = 0;
-                    myNavMesh.enabled = true;                    
-                    StartPursuit();
-                }
-            }
-
-            else if(myAction == Action.Attack)
-            {
-                myNavMesh.SetDestination(PM.gameObject.transform.position);
-            }
-
-            else if (myAction == Action.Move || myAction == Action.Flee)
-            {
-                if (myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
-                {
-                    if (actualRoom.Actions_Spéciales.Count == 0 || myType != Type.Civilian)
+                    MoveTime += Time.deltaTime;
+                    if (MoveTime >= MoveLatence)
                     {
-                        myAction = Action.None;
-                        myAnimator.SetTrigger("StopMovement");
+                        MoveTime = 0;
+                        RandomChangeRoom();
                     }
-                    else
+                }
+
+                else if (myAction == Action.Paralysed)
+                {
+                    MoveTime += Time.deltaTime;
+                    if (MoveTime >= 1)
                     {
-                        myAction = actualRoom.Actions_Spéciales[0];
-                        myAnimator.SetTrigger("Dance");
+                        MoveTime = 0;
+                        myNavMesh.enabled = true;
+                        Fuite();
+                    }
+                }
+
+                else if (myAction == Action.Found)
+                {
+                    MoveTime += Time.deltaTime;
+                    transform.LookAt(new Vector3(PM.gameObject.transform.position.x, transform.position.y, PM.gameObject.transform.position.z));
+                    if (MoveTime >= 1)
+                    {
+                        MoveTime = 0;
+                        myNavMesh.enabled = true;
+                        StartPursuit();
+                    }
+                }
+
+                else if (myAction == Action.Attack)
+                {
+                    myNavMesh.SetDestination(PM.gameObject.transform.position);
+                }
+
+                else if (myAction == Action.Move || myAction == Action.Flee)
+                {
+                    if (myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
+                    {
+                        if (actualRoom.Actions_Spéciales.Count == 0 || myType != Type.Civilian)
+                        {
+                            myAction = Action.None;
+                            myAnimator.SetTrigger("StopMovement");
+                        }
+                        else
+                        {
+                            myAction = actualRoom.Actions_Spéciales[0];
+                            myAnimator.SetTrigger("Dance");
+                        }
                     }
                 }
             }
