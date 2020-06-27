@@ -76,6 +76,7 @@ public class IAMovement : MonoBehaviour
                     if (MoveTime >= MoveLatence)
                     {
                         MoveTime = 0;
+                        myNavMesh.speed = 1.5f;
                         RandomChangeRoom();
                     }
                 }
@@ -98,6 +99,7 @@ public class IAMovement : MonoBehaviour
                     {
                         MoveTime = 0;
                         myNavMesh.enabled = true;
+                        myNavMesh.speed = 1.5f;
                         RandomChangeRoom(false);
                     }
                 }
@@ -119,17 +121,18 @@ public class IAMovement : MonoBehaviour
                     myNavMesh.SetDestination(PM.gameObject.transform.position);
                     Vector3 Direction = (PM.transform.position - transform.position).normalized;
                     RaycastHit[] ToPlayer = Physics.RaycastAll(transform.position, Direction, 100, PoursuiteLayer);
+
                     for (int i = 0; i < ToPlayer.Length; i++)
                     {
-                        if (ToPlayer[i].collider.tag.Equals("Wall"))
+                        if (ToPlayer[i].collider.tag.Equals("Player"))
+                        {
+                            // a toujours le joueur en vue
+                            break;
+                        }
+                        else if (ToPlayer[i].collider.tag.Equals("Wall"))
                         {
                             // a perdu la trace du joueur
                             LostInPursuit();
-                            break;
-                        }
-                        else if (ToPlayer[i].collider.tag.Equals("Joueur"))
-                        {
-                            // a toujours le joueur en vue
                             break;
                         }
                     }
