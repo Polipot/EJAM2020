@@ -6,6 +6,7 @@ using System.IO;
 public class aSkin : MonoBehaviour
 {
     IAMovement myIA;
+    Player_Movement myPlayer;
 
     [Header("Parties du Skin")]
     public SpriteRenderer Corps;
