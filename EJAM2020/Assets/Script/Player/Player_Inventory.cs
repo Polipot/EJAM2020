@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Player_Inventory : MonoBehaviour
 {
     GameObject currentlyItem;
+    GameObject temp;
 
     public Transform ParentForItem;
     public Text Dialogue_text;
@@ -17,15 +18,14 @@ public class Player_Inventory : MonoBehaviour
             Name_text.text = currentlyItem.name;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Item"))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Dialogue_text.text = "Press E to take it";
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                Item it = other.GetComponent<Item>();
+                Item it = temp.GetComponent<Item>();
                 if (it != null)
                 {
 
@@ -34,12 +34,27 @@ public class Player_Inventory : MonoBehaviour
                         drop(currentlyItem);
                     }
 
-                    GetNewItem(other.gameObject);
+                    GetNewItem(temp.gameObject);
 
-                    other.enabled = false;
+                    temp.GetComponent<Collider>().enabled = false;
                     Dialogue_text.text = "";
                 }
             }
+        }
+    }
+
+    void GetItemGround(GameObject tp)
+    {
+        temp = tp;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Item"))
+        {
+            Dialogue_text.text = "Press E to take it";
+
+            GetItemGround(other.gameObject);
         }
     }
 
@@ -64,6 +79,6 @@ public class Player_Inventory : MonoBehaviour
         tt.GetComponent<Item>().DropOrGet(true, transform);
         tt.transform.SetParent(ParentForItem);
         tt.transform.position = ParentForItem.position;
-        tt.transform.localEulerAngles = new Vector3(0,0,0);
+        tt.transform.localEulerAngles = new Vector3(-90,0,0);
     }
 }
