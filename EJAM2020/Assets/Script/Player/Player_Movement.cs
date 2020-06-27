@@ -10,12 +10,13 @@ public class Player_Movement : Singleton<Player_Movement>
     Rigidbody rb;
     public float Speed;
 
+    [HideInInspector]
+    public PlayerAction myPlayerAction;
+
     void Awake()
     {
         if (Instance != this)
-        {
             Destroy(gameObject);
-        }
 
         rb = GetComponent<Rigidbody>();
         myAnimator = GetComponentInChildren<Animator>();
@@ -30,17 +31,18 @@ public class Player_Movement : Singleton<Player_Movement>
 
     private void Move()
     {
-        if(rb.velocity.magnitude == 0 && (Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Vertical") > 0))
+        rb.velocity = new Vector3(Input.GetAxis("Horizontal") * Speed, 0, Input.GetAxis("Vertical") * Speed);
+
+        if (myPlayerAction == PlayerAction.Idle && rb.velocity.magnitude > 0)
         {
+            myPlayerAction = PlayerAction.Run;
             myAnimator.SetTrigger("Run");
         }
-        
-        rb.velocity = new Vector3(Input.GetAxis("Horizontal")* Speed, 0, Input.GetAxis("Vertical") * Speed);
-        
-        if (rb.velocity.magnitude != 0 && (Input.GetAxis("Horizontal") != 1 && Input.GetAxis("Vertical") != 1))
+        else if (myPlayerAction == PlayerAction.Run && rb.velocity.magnitude == 0)
         {
-            myAnimator.SetTrigger("Idle");
-        }
+            myPlayerAction = PlayerAction.Idle;
+            myAnimator.SetTrigger("StopMovement");
+        }    
     }
 
     void LookMouse()

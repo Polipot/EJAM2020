@@ -41,7 +41,7 @@ public class Player_knife : MonoBehaviour
         Debug.DrawRay(it.Player.position, it.Player.forward);
         if (Physics.Raycast(it.Player.position, it.Player.forward, out hit, 1f))
         {
-            Debug.Log(hit.collider.gameObject);
+
             if (hit.collider.GetComponent<IAMovement>() != null)
             {
                 hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
