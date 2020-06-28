@@ -658,7 +658,6 @@ GameObject:
   - component: {fileID: 6602834443188808007}
   - component: {fileID: 6602834443188808004}
   - component: {fileID: 6602834443188808005}
-  - component: {fileID: 3506922337923049993}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -724,6 +723,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4521897bd73df3e41b5a0f47e2fd760b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkinChemin: 
+  myAnimator: {fileID: 0}
   Speed: 5
   myPlayerAction: 0
 --- !u!114 &6602834443188808004
@@ -755,20 +756,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CarHere: {fileID: 0}
   PointToCar: {fileID: 4804307333965320676}
---- !u!114 &3506922337923049993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6602834443188808003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b48205424a41948bd8a07fdcaaed52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shakeMagnetude: 0.04
-  shakeTime: 0.15
 --- !u!1 &6602834443713362227
 GameObject:
   m_ObjectHideFlags: 0

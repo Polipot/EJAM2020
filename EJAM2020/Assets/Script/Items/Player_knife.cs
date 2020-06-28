@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_knife : MonoBehaviour
 {
+    CameraShaker CS;
     Player_Movement PM;
 
     Item it;
@@ -16,6 +17,7 @@ public class Player_knife : MonoBehaviour
     {
         it = GetComponent<Item>();
         PM = Player_Movement.Instance;
+        CS = CameraShaker.Instance;
     }
 
     private void Update()
@@ -49,7 +51,7 @@ public class Player_knife : MonoBehaviour
         {
             if (hit.collider.GetComponent<IAMovement>() != null)
             {
-                CameraShake.Instance.ShakeIt();
+                CS.CameraShake();
                 hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
             }
         }

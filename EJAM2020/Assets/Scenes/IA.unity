@@ -1189,6 +1189,82 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2092139426
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497552, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497553, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: inno
+      value: one is on alert, you can be him. You switch your skin! only to need.
+        If you kill one of them and no one is on alert, you can be him. You switch
+        your skin!
+      objectReference: {fileID: 0}
+    - target: {fileID: 44404438404497554, guid: 1ae481a3075579843a226d8886f6d82f,
+        type: 3}
+      propertyPath: m_Name
+      value: Menu
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1ae481a3075579843a226d8886f6d82f, type: 3}
 --- !u!1 &2116865210
 GameObject:
   m_ObjectHideFlags: 0
