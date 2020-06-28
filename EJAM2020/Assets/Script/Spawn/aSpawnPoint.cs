@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class aSpawnPoint : MonoBehaviour
 {
+    IAManager IAM;
+
     // Start is called before the first frame update
     void Awake()
     {
         IAManager.Instance.SpawnPoints.Add(transform);
+        IAM = IAManager.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        Debug.Log("Oui");
+        if(other.GetComponent<IAMovement>() != null && other.GetComponent<IAMovement>().myAction == Action.Leave)
+        {
+            IAM.SomeoneLeave(other.GetComponent<IAMovement>());
+        }
     }
 }

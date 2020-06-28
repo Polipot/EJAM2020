@@ -36,7 +36,9 @@ public class IAMovement : MonoBehaviour
 
     [Header("Police")]
     public int indexRoom;
-    float TempsRestant = 10;
+    float TempsRestant = 60;
+    [HideInInspector]
+    public bool ReadytoLeave;
 
     RoomManager RM;
 
@@ -176,11 +178,6 @@ public class IAMovement : MonoBehaviour
                             break;
                         }
                     }
-                }
-
-                else if (myAction == Action.Leave)
-                {
-
                 }
 
                 else if (myAction == Action.Move || myAction == Action.Flee)

@@ -7,6 +7,7 @@ public class IAManager : Singleton<IAManager>
 {
     [HideInInspector]
     public bool NeedsToUpdate;
+    public bool SomeoneLeft;
     [HideInInspector]
     public List<IAMovement> Population;
 
@@ -125,6 +126,25 @@ public class IAManager : Singleton<IAManager>
             }
 
             Population = Survivants;
+        }
+
+        if (SomeoneLeft)
+        {
+            List<IAMovement> CeuxQuiRestent = new List<IAMovement>();
+
+            for (int i = 0; i < Population.Count; i++)
+            {
+                if (!Population[i].ReadytoLeave)
+                {
+                    CeuxQuiRestent.Add(Population[i]);
+                }
+                else
+                {
+                    Destroy(Population[i].gameObject);
+                }
+            }
+
+            Population = CeuxQuiRestent;
         }
     }
 
@@ -251,5 +271,11 @@ public class IAManager : Singleton<IAManager>
         theMovement.myType = Type.Civilian;
         theMovement.Activation();
         Population.Add(theMovement);
+    }
+
+    public void SomeoneLeave(IAMovement theIA)
+    {
+        theIA.ReadytoLeave = true;
+        SomeoneLeft = true;
     }
 }
