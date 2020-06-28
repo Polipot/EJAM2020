@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PlayerAction { Idle, Run }
 
 public class Player_Movement : Singleton<Player_Movement>
 {
+    Text Dialogue_text;
+    GameObject temp;
+
     [HideInInspector]
     public string SkinChemin;
     public Animator myAnimator;
@@ -30,6 +34,17 @@ public class Player_Movement : Singleton<Player_Movement>
     {
         Move();
         LookMouse();
+        Interaction();
+    }
+
+    void Interaction()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && temp != null && temp.GetComponent<Piege>().Amorçé == false)
+        {
+            Dialogue_text.text = "";
+            temp.GetComponent<Piege>().Amorçé = true;
+            temp = null;
+        }
     }
 
     private void Move()
@@ -56,5 +71,34 @@ public class Player_Movement : Singleton<Player_Movement>
         mousePos.y = 0;
         transform.LookAt(mousePos);
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Piege") && other.GetComponent<Piege>().Amorçé == false)
+        {
+            if(Dialogue_text == null)
+            {
+                Dialogue_text = GetComponent<Player_Inventory>().Dialogue_text;
+            }
+
+            GetInteractibles(other.gameObject);
+
+            Dialogue_text.text = "Press E to place the trap";
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Piege"))
+        {
+            Dialogue_text.text = "";
+            GetInteractibles(null);
+        }
+    }
+
+    void GetInteractibles(GameObject tp)
+    {
+        temp = tp;
     }
 }

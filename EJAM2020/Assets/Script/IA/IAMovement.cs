@@ -26,6 +26,10 @@ public class IAMovement : MonoBehaviour
     public aRoom actualRoom;
     public Piege PiegeReservé;
 
+    [Header("Brulure")]
+    public bool Brulé;
+    float TempsBrulure;
+
     [Header("Temps")]
     float MoveTime;
     float MoveLatence;
@@ -250,6 +254,18 @@ public class IAMovement : MonoBehaviour
                         }
                     }
                 }
+
+                else
+                {
+                    if (Brulé)
+                    {
+                        TempsBrulure += Time.deltaTime;
+                        if(TempsBrulure >= 3)
+                        {
+                            Mort();
+                        }
+                    }
+                }
             }
         }
     }
@@ -336,10 +352,11 @@ public class IAMovement : MonoBehaviour
 
     void Fuite()
     {
+        myNavMesh.enabled = true;
         RandomChangeRoom(true);
     }
 
-    public void Hited(Vector3 HitingEntity, bool Lethal = false)
+    public void Hited(Vector3 HitingEntity, bool Lethal = false, bool PlayerInvolved = true)
     {
         myNavMesh.enabled = false;
         transform.LookAt(new Vector3(HitingEntity.x, transform.position.y, HitingEntity.z));
@@ -372,10 +389,14 @@ public class IAMovement : MonoBehaviour
                 }
                 else
                 {
-                    NotSeen = false;
-                    if (theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
+                    if (PlayerInvolved)
                     {
-                        theEnnemies[i].Found();
+                        
+                        NotSeen = false;
+                        if (theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
+                        {
+                            theEnnemies[i].Found();
+                        }
                     }                                            
                 }
             }
@@ -385,7 +406,10 @@ public class IAMovement : MonoBehaviour
         {
             if (NotSeen && IAM.Poursuivants.Count == 0)
             {
-                PM.GetComponentInChildren<aSkin>().LoadSkin(PM, SkinChemin);
+                if (PlayerInvolved)
+                {
+                    PM.GetComponentInChildren<aSkin>().LoadSkin(PM, SkinChemin);
+                }
                 if (IAM.theRedAlert)
                 {
                     IAM.EndAlert();
@@ -513,7 +537,6 @@ public class IAMovement : MonoBehaviour
         else
         {
             PiegeReservé.Utilisation(this);
-            Hited(PiegeReservé.transform.position);
         }
     }
 

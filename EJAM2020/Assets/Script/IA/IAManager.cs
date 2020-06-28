@@ -33,6 +33,7 @@ public class IAManager : Singleton<IAManager>
     public bool PolicemanOnGround;
     public string KnownPath;
     public bool theRedAlert;
+    [SerializeField]
     public Dictionary<IAMovement, string> Poursuivants;
     [HideInInspector]
     public float TempsPolice;

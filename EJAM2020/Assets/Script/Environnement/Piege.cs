@@ -28,13 +28,15 @@ public class Piege : MonoBehaviour
     {
         Amorçé = false;
         CS.CameraShake();
-        theIA.Hited(transform.position);
+        theIA.Hited(transform.position, false, false);
+        theIA.Brulé = true;
 
         switch (PiegeType)
         {
             case aPiege.Barbecue:
                 GameObject theFeu = Instantiate(Resources.Load<GameObject>("Prefabs/Feu"), theIA.transform.position, Resources.Load<GameObject>("Prefabs/Feu").transform.rotation);
                 theFeu.GetComponent<enFeu>().cible = theIA.transform;
+                GameObject theExplosion = Instantiate(Resources.Load<GameObject>("Prefabs/SonExplosion"), theIA.transform.position, Resources.Load<GameObject>("Prefabs/SonExplosion").transform.rotation);
                 break;
         }
     }
