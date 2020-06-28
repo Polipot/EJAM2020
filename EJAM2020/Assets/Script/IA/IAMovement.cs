@@ -204,7 +204,7 @@ public class IAMovement : MonoBehaviour
                     if(myAction != Action.Attack && myAction != Action.Found)
                     {
                         Watchout();
-                        if(myType == Type.Policeman && myAction != Action.Leave && myAction != Action.Lost)
+                        if(myType == Type.Policeman && myAction != Action.Leave && myAction != Action.Lost && myAction != Action.Found)
                         {
                             TempsRestant -= Time.deltaTime;
                             if(TempsRestant <= 0)
@@ -417,13 +417,17 @@ public class IAMovement : MonoBehaviour
         myAction = Action.Leave;
 
         int spawnIndex = Random.Range(0, IAM.SpawnPoints.Count);
-        actualRoom = null;
+        if(actualRoom != null)
+        {
+            actualRoom.Population.Remove(this);
+            actualRoom = null;
+        }
+        
         myNavMesh.enabled = true;
         myNavMesh.SetDestination(IAM.SpawnPoints[spawnIndex].position);
 
         myAnimator.SetTrigger("Walk");
         myNavMesh.speed = 1.5f;
-        Debug.Log("Oui");
     }
 
     void UpdateRadar()
