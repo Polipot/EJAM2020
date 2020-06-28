@@ -4,33 +4,39 @@ using UnityEngine;
 
 public class Player_knife : MonoBehaviour
 {
+    Player_Movement PM;
+
     Item it;
     [Range(0,3)]
     public float TimeMax;
     float time;
-    bool ok;
+    bool ok = true;
 
     private void Awake()
     {
         it = GetComponent<Item>();
+        PM = Player_Movement.Instance;
     }
 
     private void Update()
     {
         if (it != null && it.OnPlayer)
         {
-            time += Time.deltaTime;
-
-            if (time >= TimeMax)
-            {
-                ok = true;              
-            }
-
             if (Input.GetAxis("Fire") > 0 && ok)
             {
                 JETIRE();
                 time = 0;
                 ok = false;
+            }
+
+            else if (!ok)
+            {
+                time += Time.deltaTime;
+
+                if (time >= TimeMax)
+                {
+                    ok = true;
+                }
             }
         }
     }
@@ -47,6 +53,8 @@ public class Player_knife : MonoBehaviour
                 hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
             }
         }
+
+        PM.myAnimator.SetTrigger("Knife");
     }
 
 }

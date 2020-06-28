@@ -28,6 +28,7 @@ public class IAManager : Singleton<IAManager>
     [Header("Surveillance")]
     public string KnownPath;
     public bool theRedAlert;
+    public Dictionary<IAMovement, string> Poursuivants;
 
     void Awake()
     {
@@ -70,6 +71,8 @@ public class IAManager : Singleton<IAManager>
             Population.Add(theMovement);
 
             a += 1;
+
+            Poursuivants = new Dictionary<IAMovement, string>();
         }
     }
 

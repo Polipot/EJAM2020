@@ -1002,6 +1002,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knife
       objectReference: {fileID: 0}
+    - target: {fileID: 6839847775491908696, guid: b6a630ff0e40e864da7212f2d16f5757,
+        type: 3}
+      propertyPath: TimeMax
+      value: 0.33
+      objectReference: {fileID: 0}
     - target: {fileID: 6839847775491908697, guid: b6a630ff0e40e864da7212f2d16f5757,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1091,7 +1096,7 @@ MonoBehaviour:
   NeedsToUpdate: 0
   Population: []
   TempsNouveauxArrivants: 0
-  LimitePopulation: 15
+  LimitePopulation: 96
   PersonnesPourUnGarde: 14
   LatenceNouveauxArrivants: 0
   Limite_target: 4

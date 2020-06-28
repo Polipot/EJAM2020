@@ -8,7 +8,7 @@ public class Player_Movement : Singleton<Player_Movement>
 {
     [HideInInspector]
     public string SkinChemin;
-    Animator myAnimator;
+    public Animator myAnimator;
     Rigidbody rb;
     public float Speed;
 
@@ -40,11 +40,13 @@ public class Player_Movement : Singleton<Player_Movement>
         {
             myPlayerAction = PlayerAction.Run;
             myAnimator.SetTrigger("Run");
+            myAnimator.SetBool("Moving", true);
         }
         else if (myPlayerAction == PlayerAction.Run && rb.velocity.magnitude == 0)
         {
             myPlayerAction = PlayerAction.Idle;
             myAnimator.SetTrigger("StopMovement");
+            myAnimator.SetBool("Moving", false);
         }    
     }
 

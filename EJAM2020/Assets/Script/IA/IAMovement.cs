@@ -270,7 +270,7 @@ public class IAMovement : MonoBehaviour
                 {
                     theEnnemies[i].Fuite();
                 }
-                else 
+                else
                 {
                     NotSeen = false;
                     if (theEnnemies[i].myAction != Action.Attack && theEnnemies[i].myAction != Action.Found)
@@ -283,7 +283,7 @@ public class IAMovement : MonoBehaviour
 
         if (Lethal && myType == Type.Civilian)
         {
-            if (NotSeen)
+            if (NotSeen && IAM.Poursuivants.Count == 0)
             {
                 PM.GetComponentInChildren<aSkin>().LoadSkin(PM, SkinChemin);
                 if (IAM.theRedAlert)
@@ -346,6 +346,11 @@ public class IAMovement : MonoBehaviour
         myNavMesh.speed = 5f;
         myAnimator.SetTrigger("Run");
         myAction = Action.Attack;
+
+        if (!IAM.Poursuivants.ContainsKey(this))
+        {
+            IAM.Poursuivants.Add(this, gameObject.name);
+        }
     }
 
     public void LostInPursuit()
@@ -354,6 +359,11 @@ public class IAMovement : MonoBehaviour
         MoveTime = 0;
         myAction = Action.Lost;
         myAnimator.SetTrigger("Found");
+
+        if (IAM.Poursuivants.ContainsKey(this))
+        {
+            IAM.Poursuivants.Remove(this);
+        }
     }
 
     void UpdateRadar()
