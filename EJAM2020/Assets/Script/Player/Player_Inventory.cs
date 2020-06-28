@@ -22,6 +22,7 @@ public class Player_Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E) && temp != null)
         {
+
             Item it = temp.GetComponent<Item>();
             if (it != null)
             {
@@ -54,6 +55,8 @@ public class Player_Inventory : MonoBehaviour
             Dialogue_text.text = "Press E to take it";
 
             GetItemGround(other.gameObject);
+
+            Tuto.Instance.HelpWeapon();
         }
     }
 
