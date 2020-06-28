@@ -37,7 +37,7 @@ public class MusicManager : MonoBehaviour
         {
             activation();
         }
-        else if(Ready)
+        else if(Ready && MusicRooms.Count > 0)
         {
             Transform theTransform = null;
             float theDistance = 0;
