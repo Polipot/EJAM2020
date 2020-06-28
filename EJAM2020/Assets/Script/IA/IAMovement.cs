@@ -248,6 +248,11 @@ public class IAMovement : MonoBehaviour
         myAction = Action.Paralysed;
         myAnimator.SetTrigger("Hited");
 
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject Sang = Instantiate(Resources.Load<GameObject>("Bloods"), new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z + Random.Range(-1f, 1f)), transform.rotation);
+        }
+
         List<IAMovement> theEnnemies = new List<IAMovement>();
 
         foreach (IAMovement item in actualRoom.Population.Keys)
@@ -278,9 +283,13 @@ public class IAMovement : MonoBehaviour
 
         if (Lethal && myType == Type.Civilian)
         {
-            if (NotSeen && IAM.theRedAlert)
+            if (NotSeen)
             {
-                IAM.EndAlert();
+                PM.GetComponentInChildren<aSkin>().LoadSkin(PM, SkinChemin);
+                if (IAM.theRedAlert)
+                {
+                    IAM.EndAlert();
+                }                
             }
             else if (!NotSeen && !IAM.theRedAlert)
             {

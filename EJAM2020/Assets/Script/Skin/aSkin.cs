@@ -70,7 +70,7 @@ public class aSkin : MonoBehaviour
             MainDroite.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Guard/Main");
 
-            theIA.SkinChemin = "Skins/Guard/Main";
+            theIA.SkinChemin = "Skins/Guard";
         }
 
         else if(theIA.myType == Type.Civilian)
@@ -90,7 +90,21 @@ public class aSkin : MonoBehaviour
             MainDroite.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
 
-            theIA.SkinChemin = "Skins/Civil/Civil_" + rnd + "/Main";
+            theIA.SkinChemin = "Skins/Civil/Civil_" + rnd;
         }
+    }
+
+    public void LoadSkin(Player_Movement thePlayer, string path = "Skins/Civil/Civil_1")
+    {
+        Corps.sprite = Resources.Load<Sprite>(path + "/Corps");
+        Tête.sprite = Resources.Load<Sprite>(path + "/Tête");
+        EpauleDroite.sprite = Resources.Load<Sprite>(path + "/Epaule");
+        EpauleGauche.sprite = Resources.Load<Sprite>(path + "/Epaule");
+        BrasDroit.sprite = Resources.Load<Sprite>(path + "/Bras");
+        BrasGauche.sprite = Resources.Load<Sprite>(path + "/Bras");
+        MainDroite.sprite = Resources.Load<Sprite>(path + "/Main");
+        MainGauche.sprite = Resources.Load<Sprite>(path + "/Main");
+
+        thePlayer.SkinChemin = path;
     }
 }
