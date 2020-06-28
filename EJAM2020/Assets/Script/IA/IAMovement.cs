@@ -441,4 +441,15 @@ public class IAMovement : MonoBehaviour
             Radar.transform.localScale = new Vector3(Radar.transform.localScale.x - 0.01f, Radar.transform.localScale.y - 0.01f, 1);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (myType == Type.Policeman)
+        {
+            if (other.CompareTag("Player"))
+            {
+                other.GetComponent<Player_life>().Hited();
+            }
+        }
+    }
 }

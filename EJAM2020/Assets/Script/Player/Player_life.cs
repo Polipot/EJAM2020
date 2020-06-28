@@ -8,6 +8,9 @@ public class Player_life : Singleton<Player_life>
     public Transform CarHere = null;
     public Transform PointToCar;
 
+    public GameObject loser;
+    public GameObject tuto;
+
     private void Update()
     {
         if (CarHere != null)
@@ -19,7 +22,14 @@ public class Player_life : Singleton<Player_life>
 
     public void Hited()
     {
-        Debug.Log("PLAYER IS DEAD ");
+        tuto.SetActive(false);
+        loser.SetActive(true);
+        Invoke("changeScene", 3f);
+    }
+
+    void changeScene()
+    {
+        SceneManager.LoadScene("Menu");
     }
 
     public void GetCar(Transform car)
