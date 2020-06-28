@@ -41,7 +41,7 @@ public class IAMovement : MonoBehaviour
 
     [Header("Police")]
     public int indexRoom;
-    float TempsRestant = 10;
+    float TempsRestant = 60;
     [HideInInspector]
     public bool ReadytoLeave;
     AudioSource ads;
@@ -262,7 +262,7 @@ public class IAMovement : MonoBehaviour
                         TempsBrulure += Time.deltaTime;
                         if(TempsBrulure >= 3)
                         {
-                            Mort();
+                            Mort(true);
                         }
                     }
                 }
@@ -288,7 +288,7 @@ public class IAMovement : MonoBehaviour
             }
         }
 
-        if(theRoom == null)
+        if(theRoom == null || (theRoom == actualRoom && myType == Type.Policeman))
         {
             RandomChangeRoom(isFuite);
         }
@@ -356,7 +356,7 @@ public class IAMovement : MonoBehaviour
         RandomChangeRoom(true);
     }
 
-    public void Hited(Vector3 HitingEntity, bool Lethal = false, bool PlayerInvolved = true)
+    public void Hited(Vector3 HitingEntity, bool Lethal = false, bool PlayerInvolved = true, bool needsBlood = true)
     {
         myNavMesh.enabled = false;
         transform.LookAt(new Vector3(HitingEntity.x, transform.position.y, HitingEntity.z));
@@ -365,9 +365,12 @@ public class IAMovement : MonoBehaviour
         myAction = Action.Paralysed;
         myAnimator.SetTrigger("Hited");
 
-        for (int i = 0; i < 3; i++)
+        if (needsBlood)
         {
-            GameObject Sang = Instantiate(Resources.Load<GameObject>("Bloods"), new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z + Random.Range(-1f, 1f)), transform.rotation);
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject Sang = Instantiate(Resources.Load<GameObject>("Bloods"), new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z + Random.Range(-1f, 1f)), transform.rotation);
+            }
         }
 
         List<IAMovement> theEnnemies = new List<IAMovement>();
@@ -424,8 +427,16 @@ public class IAMovement : MonoBehaviour
         }
     }
 
-    void Mort()
+    void Mort(bool NeedsBlood = false)
     {
+        if (NeedsBlood)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                GameObject Sang = Instantiate(Resources.Load<GameObject>("Bloods"), new Vector3(transform.position.x + Random.Range(-1f, 1f), transform.position.y, transform.position.z + Random.Range(-1f, 1f)), transform.rotation);
+            }
+        }
+
         if (IsTarget)
         {
             IAM.DeletePortrait(SkinChemin);

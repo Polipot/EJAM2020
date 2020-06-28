@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player_bulle : MonoBehaviour
 {
     Item it;
+    public LayerMask theLayerMask;
 
     [Range(0, 2)]
     public float ForceMax;
@@ -46,24 +48,35 @@ public class Player_bulle : MonoBehaviour
         var bb = (GameObject)Instantiate(Resources.Load("Particles/Particle_bulle"), it.Player.position, it.Player.rotation);
         bb.transform.SetParent(it.Player.transform);
         Destroy(bb, 5f);
+        AddObjectSound();
 
-        RaycastHit hit;
-        Debug.DrawRay(it.Player.position, it.Player.forward);
-        if (Physics.Raycast(it.Player.position, it.Player.forward, out hit, 2f))
+        RaycastHit[] hit = Physics.RaycastAll(it.Player.position, it.Player.forward, 4f, theLayerMask).OrderBy(h => h.distance).ToArray();
+
+        for (int i = 0; i < hit.Length; i++)
         {
-            if (hit.collider.GetComponent<IAMovement>() != null)
+            if (hit[i].collider.tag.Equals("Wall"))
+            {
+                break;
+            }
+
+            else if (hit[i].collider.GetComponent<IAMovement>() != null)
             {
                 CameraShake.Instance.ShakeIt();
 
-                Vector3 dir = (hit.collider.transform.position - transform.position).normalized;
+                Vector3 dir = (hit[i].collider.transform.position - transform.position).normalized;
 
-                hit.collider.GetComponent<IAMovement>().Hited(transform.position, false);
+                hit[i].collider.GetComponent<IAMovement>().Hited(transform.position, false, true, false);
 
-                if (hit.collider.GetComponent<Rigidbody>() != null)
+                if (hit[i].collider.GetComponent<Rigidbody>() != null)
                 {
-                    hit.collider.GetComponent<Rigidbody>().AddForce(dir * ForceMax, ForceMode.Impulse);
+                    hit[i].collider.GetComponent<Rigidbody>().AddForce(dir * ForceMax * 10, ForceMode.Impulse);
                 }
             }
         }
+    }
+
+    void AddObjectSound()
+    {
+        var O_sound = (GameObject)Instantiate(Resources.Load("Prefabs/SonBulles"), transform.position, transform.rotation);
     }
 }

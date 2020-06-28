@@ -33,7 +33,6 @@ public class IAManager : Singleton<IAManager>
     public bool PolicemanOnGround;
     public string KnownPath;
     public bool theRedAlert;
-    [SerializeField]
     public Dictionary<IAMovement, string> Poursuivants;
     [HideInInspector]
     public float TempsPolice;
@@ -141,6 +140,10 @@ public class IAManager : Singleton<IAManager>
                 }
                 else
                 {
+                    if(Population[i].myType == Type.Policeman)
+                    {
+                        PolicemanOnGround = false;
+                    }
                     Destroy(Population[i].gameObject);
                 }
             }
