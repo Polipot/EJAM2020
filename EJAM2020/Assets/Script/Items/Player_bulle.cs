@@ -59,6 +59,11 @@ public class Player_bulle : MonoBehaviour
                 break;
             }
 
+            else if (hit[i].collider.GetComponent<CourtCircuit>())
+            {
+                break;
+            }
+
             else if (hit[i].collider.GetComponent<IAMovement>() != null)
             {
                 CameraShake.Instance.ShakeIt();

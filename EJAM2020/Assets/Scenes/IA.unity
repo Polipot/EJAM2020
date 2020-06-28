@@ -5796,7 +5796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1348945920}
   - component: {fileID: 1348945921}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6070,7 +6070,7 @@ GameObject:
   - component: {fileID: 1529648152}
   - component: {fileID: 1529648151}
   - component: {fileID: 1529648150}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Court-Circuit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11475,7 +11475,7 @@ GameObject:
   - component: {fileID: 1347942426107157478}
   - component: {fileID: 8695159347721370955}
   - component: {fileID: 8695159347721370954}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: "Electricit\xE9"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
