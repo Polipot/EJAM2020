@@ -11,6 +11,8 @@ public class IAMovement : MonoBehaviour
 {
     [HideInInspector]
     public bool isBasePerso;
+    [HideInInspector]
+    public bool BasePerso;
 
     IAManager IAM;
     Player_Movement PM;
@@ -318,7 +320,6 @@ public class IAMovement : MonoBehaviour
             else
                 myNavMesh.SetDestination(new Vector3(Random.Range(theRoom.downLeft.x, theRoom.downRight.x), 0, Random.Range(theRoom.downLeft.z, theRoom.upLeft.z)));
 
-
             if (actualRoom != theRoom)
             {
                 if(actualRoom != null)
@@ -334,8 +335,7 @@ public class IAMovement : MonoBehaviour
                 }
             }
 
-
-            if (isFuite == false)
+            else if (isFuite == false)
             {
                 myAction = Action.Move;
                 myAnimator.SetTrigger("Walk");
@@ -346,7 +346,16 @@ public class IAMovement : MonoBehaviour
                 myNavMesh.speed = 5f;
                 myAnimator.SetTrigger("Run");
                 myAction = Action.Flee;               
-            }           
+            }
+            if (BasePerso)
+            {
+                BasePerso = false;
+                Vector3 theDestination = myNavMesh.destination;
+
+                myNavMesh.enabled = false;
+                transform.position = theDestination;
+                myNavMesh.enabled = true;
+            }
         }
     }
 

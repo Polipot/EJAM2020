@@ -83,7 +83,7 @@ public class IAManager : Singleton<IAManager>
                 }
                 theMovement.myType = Type.Civilian;
             }
-
+            theMovement.BasePerso = true;
             theMovement.Activation(mustBeATarget, true);
             Population.Add(theMovement);
 
