@@ -39,7 +39,7 @@ public class IAMovement : MonoBehaviour
     public Action myAction;
     public Type myType;
 
-    public void Activation()
+    public void Activation(bool isATarget = false)
     {
         myNavMesh = GetComponent<NavMeshAgent>();
         myAnimator = GetComponentInChildren<Animator>();
@@ -68,6 +68,10 @@ public class IAMovement : MonoBehaviour
         Radar = transform.GetChild(1).gameObject;
         Radar.transform.localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
         Radar.GetComponent<SpriteRenderer>().color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, Radar.GetComponent<SpriteRenderer>().color.a);
+        if (isATarget)
+        {
+            IsTarget = true;
+        }
         mySkin = GetComponentInChildren<aSkin>();
         mySkin.LoadSkin(this);
         Actif = true;
@@ -305,7 +309,7 @@ public class IAMovement : MonoBehaviour
     {
         if (IsTarget)
         {
-            IAM.DeletePortrait(mySkin.Tête.sprite);
+            IAM.DeletePortrait(SkinChemin);
         }
         if (actualRoom != null)
         {

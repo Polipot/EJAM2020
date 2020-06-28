@@ -45,6 +45,8 @@ public class IAManager : Singleton<IAManager>
                 Vector3.zero, transform.rotation);
 
             IAMovement theMovement = anAI.GetComponent<IAMovement>();
+
+            bool mustBeATarget = false;
             if (a >= PersonnesPourUnGarde)
             {
                 theMovement.myType = Type.Guard;                
@@ -54,13 +56,10 @@ public class IAManager : Singleton<IAManager>
             {
                 if (i % 2 == 1 && Limite_target > 0)
                 {
-                    theMovement.IsTarget = true;
-                    theMovement.mySkin = theMovement.transform.GetComponentInChildren<aSkin>();
-                    theMovement.mySkin.LoadSkin(theMovement);
                     Targets_.Add(theMovement);
                     Limite_target--;
                     //Debug.Log("IM A TARGET");
-
+                    mustBeATarget = true;
                     var p = (GameObject)Instantiate(Resources.Load("Particles/HERE"), anAI.transform);
                     p.transform.position = anAI.transform.position;
 
@@ -68,7 +67,7 @@ public class IAManager : Singleton<IAManager>
                 theMovement.myType = Type.Civilian;
             }
 
-            theMovement.Activation();
+            theMovement.Activation(mustBeATarget);
             Population.Add(theMovement);
 
             a += 1;
@@ -116,11 +115,13 @@ public class IAManager : Singleton<IAManager>
         newPortrait.GetComponent<Image>().sprite = Resources.Load<Sprite>(path + "/Tête");
     }
 
-    public void DeletePortrait(Sprite theTête)
+    public void DeletePortrait(string path)
     {
+        Sprite theTête = Resources.Load<Sprite>(path + "/Tête");
+
         for (int i = 0; i < thePortraitPanel.transform.childCount; i++)
         {
-            if(thePortraitPanel.transform.GetChild(i).GetComponent<Image>().sprite == theTête)
+            if(thePortraitPanel.transform.GetChild(i).gameObject.activeSelf == true && thePortraitPanel.transform.GetChild(i).GetComponent<Image>().sprite == theTête)
             {
                 thePortraitPanel.transform.GetChild(i).gameObject.SetActive(false);
                 break;
