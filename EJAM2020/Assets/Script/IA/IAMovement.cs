@@ -553,7 +553,7 @@ public class IAMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (myType == Type.Policeman)
+        if (myType == Type.Policeman ||myType == Type.Guard)
         {
             if (other.CompareTag("Player"))
             {
