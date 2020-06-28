@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found, Lost, Leave }
+public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found, Lost, Leave, Interaction }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
@@ -24,6 +24,7 @@ public class IAMovement : MonoBehaviour
 
     [Header("Piece")]
     public aRoom actualRoom;
+    public Piege PiegeReservé;
 
     [Header("Temps")]
     float MoveTime;
@@ -69,11 +70,16 @@ public class IAMovement : MonoBehaviour
                 break;
             case Type.Guard:
                 PortéeSurveillance = 6;
+                ads = gameObject.AddComponent<AudioSource>();
+                ads.clip = (AudioClip)Resources.Load("TalkPlice");
+                ads.volume = 0.6f;
+                ads.enabled = false;
                 break;
             case Type.Policeman:
                 PortéeSurveillance = 10;
                 ads = gameObject.AddComponent<AudioSource>();
                 ads.clip = (AudioClip)Resources.Load("TalkPlice");
+                ads.volume = 0.6f;
                 ads.enabled = false;
                 break;
             default:
@@ -112,11 +118,36 @@ public class IAMovement : MonoBehaviour
             {
                 if (myAction == Action.None || myAction == Action.Dance)
                 {
+                    if(PiegeReservé == null)
+                    {
+                        MoveTime += Time.deltaTime;
+                        if (MoveTime >= MoveLatence)
+                        {
+                            MoveTime = 0;
+                            myNavMesh.speed = 1.5f;
+                            RandomChangeRoom();
+                        }
+                    }
+                    else
+                    {
+                        if(Vector3.Distance(transform.position, PiegeReservé.transform.GetChild(0).transform.position) < 0.7f)
+                        {
+                            Utilisation();
+                        }
+                    }
+                }
+
+                else if(myAction == Action.Interaction)
+                {
+                    transform.LookAt(new Vector3(PiegeReservé.transform.position.x, transform.position.y, PiegeReservé.transform.position.z));
                     MoveTime += Time.deltaTime;
-                    if (MoveTime >= MoveLatence)
+                    if (MoveTime >= 3)
                     {
                         MoveTime = 0;
+                        myNavMesh.enabled = true;
                         myNavMesh.speed = 1.5f;
+                        PiegeReservé.theUser = null;
+                        PiegeReservé = null;
                         RandomChangeRoom();
                     }
                 }
@@ -247,9 +278,32 @@ public class IAMovement : MonoBehaviour
         }
         else
         {
-            myNavMesh.SetDestination(new Vector3(Random.Range(theRoom.downLeft.x, theRoom.downRight.x), 0, Random.Range(theRoom.downLeft.z, theRoom.upLeft.z)));
+            if(!isFuite && myType == Type.Civilian && actualRoom == theRoom && theRoom.Pieges.Count > 0 && Random.Range(0,101) < 50)
+            {
+                for (int i = 0; i < theRoom.Pieges.Count; i++)
+                {
+                    if(theRoom.Pieges[i].theUser == null)
+                    {
+                        PiegeReservé = theRoom.Pieges[i];
+                        PiegeReservé.theUser = this;
+                        //Utilisation du piège
+                    }
+                }
+            }
+            else if(isFuite && PiegeReservé != null)
+            {
+                PiegeReservé.theUser = null;
+                PiegeReservé = null;
+            }
 
-            if(actualRoom != theRoom)
+            if(PiegeReservé != null)
+                myNavMesh.SetDestination(new Vector3(PiegeReservé.transform.GetChild(0).transform.position.x, 0, PiegeReservé.transform.GetChild(0).transform.position.z));
+
+            else
+                myNavMesh.SetDestination(new Vector3(Random.Range(theRoom.downLeft.x, theRoom.downRight.x), 0, Random.Range(theRoom.downLeft.z, theRoom.upLeft.z)));
+
+
+            if (actualRoom != theRoom)
             {
                 if(actualRoom != null)
                 {
@@ -445,6 +499,21 @@ public class IAMovement : MonoBehaviour
         else if (!IAM.theRedAlert && Radar.transform.localScale.x > PortéeSurveillance)
         {
             Radar.transform.localScale = new Vector3(Radar.transform.localScale.x - 0.01f, Radar.transform.localScale.y - 0.01f, 1);
+        }
+    }
+
+    void Utilisation()
+    {
+        if (!PiegeReservé.Amorçé)
+        {
+            myNavMesh.enabled = false;
+            MoveTime = 0;
+            myAction = Action.Interaction;
+        }
+        else
+        {
+            PiegeReservé.Utilisation(this);
+            Hited(PiegeReservé.transform.position);
         }
     }
 

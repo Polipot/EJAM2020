@@ -11,6 +11,7 @@ public class aRoom : MonoBehaviour
     [Header("Stats")]
     public PopValeur Densité;
     public List<Action> Actions_Spéciales;
+    public List<Piege> Pieges;
     [HideInInspector]
     public Dictionary<IAMovement, string> Population;
 
