@@ -303,6 +303,10 @@ public class IAMovement : MonoBehaviour
 
     void Mort()
     {
+        if (IsTarget)
+        {
+            IAM.DeletePortrait(mySkin.Tête.sprite);
+        }
         if (actualRoom != null)
         {
             actualRoom.Population.Remove(this);
@@ -310,10 +314,7 @@ public class IAMovement : MonoBehaviour
 
         IAManager.Instance.NeedsToUpdate = true;
         myAction = Action.Dead;
-        if (IsTarget)
-        {
-            IAM.DeletePortrait(mySkin.Tête.sprite);
-        }
+        
     }
 
     public void Found()

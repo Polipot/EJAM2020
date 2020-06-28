@@ -57,6 +57,8 @@ GameObject:
   - component: {fileID: 523991732351007073}
   - component: {fileID: 523991732351007074}
   - component: {fileID: 523991732351007075}
+  - component: {fileID: 7238710662552838119}
+  - component: {fileID: 5181783666831569022}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -129,3 +131,34 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 523991732351007076}
   m_Enabled: 1
+--- !u!95 &7238710662552838119
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523991732351007076}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cf0a919e6fda80f4f80d4983bd050a3a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5181783666831569022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523991732351007076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eec520f88c165a45a5681f48e072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

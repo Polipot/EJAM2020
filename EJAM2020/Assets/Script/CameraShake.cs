@@ -15,7 +15,7 @@ public class CameraShake : Singleton<CameraShake>
 
     public void ShakeIt()
     {
-        cameraInitialPosition = Camera.main.transform.position;
+        cameraInitialPosition = Camera.main.transform.localPosition;
         InvokeRepeating("StartCameraShaking", 0f, 0.005f);
         Invoke("StopCameraShaking", shakeTime);
     }
@@ -24,16 +24,16 @@ public class CameraShake : Singleton<CameraShake>
     {
         float cameraShakingOffsetX = Random.value * shakeMagnetude * 2 - shakeMagnetude;
         float cameraShakingOffsetY = Random.value * shakeMagnetude * 2 - shakeMagnetude;
-        Vector3 cameraIntermadiatePosition = Camera.main.transform.position;
+        Vector3 cameraIntermadiatePosition = Camera.main.transform.localPosition;
         cameraIntermadiatePosition.x += cameraShakingOffsetX;
         cameraIntermadiatePosition.y += cameraShakingOffsetY;
-        Camera.main.transform.position = cameraIntermadiatePosition;
+        Camera.main.transform.localPosition = cameraIntermadiatePosition;
     }
 
     void StopCameraShaking()
     {
         CancelInvoke("StartCameraShaking");
-        Camera.main.transform.position = cameraInitialPosition;
+        Camera.main.transform.localPosition = new Vector3(0,10,0);
     }
 }
 
