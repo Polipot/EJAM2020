@@ -36,7 +36,7 @@ public class IAMovement : MonoBehaviour
 
     [Header("Police")]
     public int indexRoom;
-    float TempsRestant = 60;
+    float TempsRestant = 10;
     [HideInInspector]
     public bool ReadytoLeave;
 
@@ -423,6 +423,7 @@ public class IAMovement : MonoBehaviour
 
         myAnimator.SetTrigger("Walk");
         myNavMesh.speed = 1.5f;
+        Debug.Log("Oui");
     }
 
     void UpdateRadar()

@@ -15,7 +15,6 @@ public class aSpawnPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Oui");
         if(other.GetComponent<IAMovement>() != null && other.GetComponent<IAMovement>().myAction == Action.Leave)
         {
             IAM.SomeoneLeave(other.GetComponent<IAMovement>());
