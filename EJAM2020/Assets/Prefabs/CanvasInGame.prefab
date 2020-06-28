@@ -984,7 +984,10 @@ MonoBehaviour:
   m_Text: 'Hi,
 
     if you''re hired, it''s for a good reason. You''re the best!
-    But we have to show you how to kill, to be sure!'
+    But we have to show you how to kill, to be sure!
+
+    Once it''s done, get in
+    the car'
 --- !u!1 &1495430641031951657
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,7 +1262,6 @@ MonoBehaviour:
   canvasTuto: {fileID: 1495430641280046511}
   bt: {fileID: 1495430641609863278}
   BtHelp: {fileID: 1495430641850856748}
-  BtStop: {fileID: 1495430640592149070}
   Blocs:
   - {fileID: 1495430641517905777}
   - {fileID: 1495430641031951657}
@@ -1368,7 +1370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1495430641280046510
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1741,8 +1743,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000027657, y: 0}
-  m_SizeDelta: {x: 644.8052, y: 317.06067}
+  m_AnchoredPosition: {x: 0.000027657, y: -28.4}
+  m_SizeDelta: {x: 644.8052, y: 373.9394}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1495430641517905782
 CanvasRenderer:
