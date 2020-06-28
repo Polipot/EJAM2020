@@ -249,8 +249,12 @@ public class IAManager : Singleton<IAManager>
         }
     }
 
+    [Space]
+    bool first = false;
+    public GameObject CamZoom_g;
     public void SpawnPoliceman()
     {
+
         int theIndexSpawn = Random.Range(0, SpawnPoints.Count);
 
         GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
@@ -261,6 +265,19 @@ public class IAManager : Singleton<IAManager>
         theMovement.myType = Type.Policeman;
         theMovement.Activation();
         Population.Add(theMovement);
+
+        if (!first)
+        {
+            first = true;
+            CamZoom_g.SetActive(true);
+            CamZoom_g.transform.position = anAI.transform.position;
+            Tuto.Instance.step = 7;
+            Invoke("CamZoom", 0.1f);
+        }
+    }
+    void CamZoom()
+    {
+        CamZoom_g.SetActive(false);
     }
 
     public void SpawnCivil()

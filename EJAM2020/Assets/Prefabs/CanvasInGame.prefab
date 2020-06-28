@@ -1254,10 +1254,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c04d52c3a307e4fbd24c31fb5e148a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  step: 0
   Menu: {fileID: 1495430642133189263}
   canvasTuto: {fileID: 1495430641280046511}
   bt: {fileID: 1495430641609863278}
   BtHelp: {fileID: 1495430641850856748}
+  BtStop: {fileID: 1495430640592149070}
   Blocs:
   - {fileID: 1495430641517905777}
   - {fileID: 1495430641031951657}

@@ -7,7 +7,7 @@ public class Tuto : Singleton<Tuto>
 {
     bool isActive = true;
 
-    int step;
+    public int step;
     public GameObject Menu;
     public GameObject canvasTuto;
     public GameObject bt;
@@ -89,6 +89,7 @@ public class Tuto : Singleton<Tuto>
                 break;
 
             case 7:
+                bt.SetActive(true);
                 BtHelp.SetActive(false);
                 Pepole_g.SetActive(true);
                 Pepole.text = police;
