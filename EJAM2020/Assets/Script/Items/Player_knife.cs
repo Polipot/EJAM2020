@@ -8,6 +8,7 @@ public class Player_knife : MonoBehaviour
     Player_Movement PM;
     public BoxCollider bc;
     public BoxCollider bcItem;
+    public GameObject item;
 
     AudioSource ads;
 
@@ -30,6 +31,8 @@ public class Player_knife : MonoBehaviour
 
         if (it != null && it.OnPlayer)
         {
+            item.SetActive(false);
+
             if (Input.GetAxis("Fire") > 0 && ok)
             {
                 ads.enabled = false;
@@ -50,7 +53,9 @@ public class Player_knife : MonoBehaviour
                     ok = true;
                 }
             }
-        }     
+        }
+        else item.SetActive(true);
+
     }
 
     void JETIRE()

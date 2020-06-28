@@ -8,6 +8,7 @@ public class Player_bulle : MonoBehaviour
     Player_Movement PM;
     Item it;
     public LayerMask theLayerMask;
+    public GameObject item;
 
     [Range(0, 2)]
     public float ForceMax;
@@ -26,6 +27,8 @@ public class Player_bulle : MonoBehaviour
     {
         if (it != null && it.OnPlayer)
         {
+            item.SetActive(false);
+
             if (!ok)
             {
                 time += Time.deltaTime;
@@ -43,6 +46,8 @@ public class Player_bulle : MonoBehaviour
                 ok = false;
             }
         }
+        else item.SetActive(true);
+
     }
 
     void JETIRE()
