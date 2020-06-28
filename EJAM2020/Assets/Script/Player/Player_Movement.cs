@@ -6,6 +6,8 @@ public enum PlayerAction { Idle, Run }
 
 public class Player_Movement : Singleton<Player_Movement>
 {
+    [HideInInspector]
+    public string SkinChemin;
     Animator myAnimator;
     Rigidbody rb;
     public float Speed;
@@ -20,6 +22,8 @@ public class Player_Movement : Singleton<Player_Movement>
 
         rb = GetComponent<Rigidbody>();
         myAnimator = GetComponentInChildren<Animator>();
+
+        GetComponentInChildren<aSkin>().LoadSkin(this);
     }
 
     void Update()
@@ -27,7 +31,6 @@ public class Player_Movement : Singleton<Player_Movement>
         Move();
         LookMouse();
     }
-
 
     private void Move()
     {
