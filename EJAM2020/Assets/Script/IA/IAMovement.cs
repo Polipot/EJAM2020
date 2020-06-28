@@ -39,6 +39,7 @@ public class IAMovement : MonoBehaviour
     float TempsRestant = 10;
     [HideInInspector]
     public bool ReadytoLeave;
+    AudioSource ads;
 
     RoomManager RM;
 
@@ -47,6 +48,7 @@ public class IAMovement : MonoBehaviour
 
     public Action myAction;
     public Type myType;
+
 
     public void Activation(bool isATarget = false, bool isActivation = false)
     {
@@ -70,6 +72,9 @@ public class IAMovement : MonoBehaviour
                 break;
             case Type.Policeman:
                 PortéeSurveillance = 10;
+                ads = gameObject.AddComponent<AudioSource>();
+                ads.clip = (AudioClip)Resources.Load("TalkPlice");
+                ads.enabled = false;
                 break;
             default:
                 break;
@@ -359,6 +364,7 @@ public class IAMovement : MonoBehaviour
 
     public void Found()
     {
+        ads.enabled = true;
         myNavMesh.enabled = false;
         MoveTime = 0;
         myAction = Action.Found;

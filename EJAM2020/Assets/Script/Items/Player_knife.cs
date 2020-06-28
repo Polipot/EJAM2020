@@ -9,6 +9,8 @@ public class Player_knife : MonoBehaviour
     public BoxCollider bc;
     public BoxCollider bcItem;
 
+    AudioSource ads;
+
     Item it;
     [Range(0,3)]
     public float TimeMax;
@@ -18,6 +20,7 @@ public class Player_knife : MonoBehaviour
     private void Awake()
     {
         it = GetComponent<Item>();
+        ads = GetComponent<AudioSource>();
         PM = Player_Movement.Instance;
         CS = CameraShaker.Instance;
     }
@@ -29,6 +32,8 @@ public class Player_knife : MonoBehaviour
         {
             if (Input.GetAxis("Fire") > 0 && ok)
             {
+                ads.enabled = false;
+                ads.enabled = true;
                 PM.myAnimator.SetTrigger("Knife");
                 bc.enabled = true;
                 Invoke("JETIRE", 0.05f);
@@ -59,6 +64,7 @@ public class Player_knife : MonoBehaviour
         {
             CS.CameraShake();
             other.GetComponent<IAMovement>().Hited(transform.position, true);
+            bc.enabled = false;
         }
     }
 

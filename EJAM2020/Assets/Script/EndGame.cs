@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndGame : MonoBehaviour
 {
     bool isFinished = false;
 
     public Collider col;
+    public GameObject loser;
+    public GameObject tuto;
+
+    void changeScene()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 
     private void FixedUpdate()
     {
@@ -26,7 +34,10 @@ public class EndGame : MonoBehaviour
     {
         if (other.CompareTag("Player") && isFinished)
         {
-            Debug.Log("FIN DU GAME");
+            tuto.SetActive(false);
+            loser.SetActive(true);
+            Invoke("changeScene", 3f);
         }
     }
+
 }
