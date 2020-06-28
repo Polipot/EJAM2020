@@ -101,6 +101,20 @@ public class aSkin : MonoBehaviour
                 AlreadyAsignedOnTarget = true;
             }
         }
+
+        else if (theIA.myType == Type.Policeman)
+        {
+            Corps.sprite = Resources.Load<Sprite>("Skins/Policeman/Corps");
+            Tête.sprite = Resources.Load<Sprite>("Skins/Policeman/Tête");
+            EpauleDroite.sprite = Resources.Load<Sprite>("Skins/Policeman/Epaule");
+            EpauleGauche.sprite = Resources.Load<Sprite>("Skins/Policeman/Epaule");
+            BrasDroit.sprite = Resources.Load<Sprite>("Skins/Policeman/Bras");
+            BrasGauche.sprite = Resources.Load<Sprite>("Skins/Policeman/Bras");
+            MainDroite.sprite = Resources.Load<Sprite>("Skins/Policeman/Main");
+            MainGauche.sprite = Resources.Load<Sprite>("Skins/Policeman/Main");
+
+            theIA.SkinChemin = "Skins/Policeman";
+        }
     }
 
     public void LoadSkin(Player_Movement thePlayer, string path = "Skins/Civil/Civil_1")

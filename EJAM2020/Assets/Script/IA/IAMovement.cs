@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found, Lost }
+public enum Action { None, Move, Flee, Attack, Dance, Dead, Paralysed, Found, Lost, Leave }
 public enum Type { Civilian, Guard, Policeman }
 
 public class IAMovement : MonoBehaviour
 {
+    [HideInInspector]
+    public bool isBasePerso;
+
     IAManager IAM;
     Player_Movement PM;
     [HideInInspector]
@@ -31,6 +34,10 @@ public class IAMovement : MonoBehaviour
     public GameObject Radar;
     public LayerMask PoursuiteLayer;
 
+    [Header("Police")]
+    public int indexRoom;
+    float TempsRestant = 10;
+
     RoomManager RM;
 
     NavMeshAgent myNavMesh;
@@ -39,7 +46,7 @@ public class IAMovement : MonoBehaviour
     public Action myAction;
     public Type myType;
 
-    public void Activation(bool isATarget = false)
+    public void Activation(bool isATarget = false, bool isActivation = false)
     {
         myNavMesh = GetComponent<NavMeshAgent>();
         myAnimator = GetComponentInChildren<Animator>();
@@ -74,7 +81,19 @@ public class IAMovement : MonoBehaviour
         }
         mySkin = GetComponentInChildren<aSkin>();
         mySkin.LoadSkin(this);
+        if (isActivation)
+        {
+            isBasePerso = true;
+        }
         Actif = true;
+
+        
+        if (IAM.theRedAlert)
+        {
+            Radar.GetComponent<SpriteRenderer>().color = new Color(Color.red.r, Color.red.g, Color.red.b, Radar.GetComponent<SpriteRenderer>().color.a);
+            PortéeSurveillance += 2;
+        }
+        UpdateRadar();
     }
 
     // Update is called once per frame
@@ -114,7 +133,14 @@ public class IAMovement : MonoBehaviour
                         MoveTime = 0;
                         myNavMesh.enabled = true;
                         myNavMesh.speed = 1.5f;
-                        RandomChangeRoom(false);
+                        if(myType == Type.Policeman && TempsRestant <= 0)
+                        {
+                            PoliceStartLeave();
+                        }
+                        else
+                        {
+                            RandomChangeRoom(false);
+                        }
                     }
                 }
 
@@ -152,6 +178,11 @@ public class IAMovement : MonoBehaviour
                     }
                 }
 
+                else if (myAction == Action.Leave)
+                {
+
+                }
+
                 else if (myAction == Action.Move || myAction == Action.Flee)
                 {
                     if (myNavMesh.desiredVelocity.magnitude == 0 && Vector3.Distance(transform.position, myNavMesh.destination) < 2)
@@ -176,6 +207,14 @@ public class IAMovement : MonoBehaviour
                     if(myAction != Action.Attack && myAction != Action.Found)
                     {
                         Watchout();
+                        if(myType == Type.Policeman && myAction != Action.Leave && myAction != Action.Lost)
+                        {
+                            TempsRestant -= Time.deltaTime;
+                            if(TempsRestant <= 0)
+                            {
+                                PoliceStartLeave();
+                            }
+                        }
                     }
                 }
             }
@@ -374,6 +413,19 @@ public class IAMovement : MonoBehaviour
         {
             IAM.Poursuivants.Remove(this);
         }
+    }
+
+    public void PoliceStartLeave()
+    {
+        myAction = Action.Leave;
+
+        int spawnIndex = Random.Range(0, IAM.SpawnPoints.Count);
+        actualRoom = null;
+        myNavMesh.enabled = true;
+        myNavMesh.SetDestination(IAM.SpawnPoints[spawnIndex].position);
+
+        myAnimator.SetTrigger("Walk");
+        myNavMesh.speed = 1.5f;
     }
 
     void UpdateRadar()

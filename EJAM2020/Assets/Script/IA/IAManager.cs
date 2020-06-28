@@ -11,11 +11,13 @@ public class IAManager : Singleton<IAManager>
     public List<IAMovement> Population;
 
     [Header("Temps")]
+    public bool needNewPopulation;
     [HideInInspector]
     public float TempsNouveauxArrivants;
     [Range(10, 150)]
     public int LimitePopulation;
     public int PersonnesPourUnGarde;
+    [Range(10, 150)]
     public float LatenceNouveauxArrivants;
 
     [Header("Targets")]
@@ -27,9 +29,21 @@ public class IAManager : Singleton<IAManager>
     public GameObject thePortraitPanel;
 
     [Header("Surveillance")]
+    public bool PolicemanOnGround;
     public string KnownPath;
     public bool theRedAlert;
     public Dictionary<IAMovement, string> Poursuivants;
+    [HideInInspector]
+    public float TempsPolice;
+    [HideInInspector]
+    public int VictimesActuelles;
+    [Range(1, 10)]
+    public int VictimesPourPolice;
+    public float LatencePolice;
+    bool PoliceIncoming;
+
+    [Header("Spawn"),HideInInspector]
+    public List<Transform> SpawnPoints;
 
     void Awake()
     {
@@ -41,8 +55,10 @@ public class IAManager : Singleton<IAManager>
 
         for (int i = 0; i < LimitePopulation; i++)
         {
+            int theIndexSpawn = Random.Range(0, SpawnPoints.Count);
+
             GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
-                Vector3.zero, transform.rotation);
+                SpawnPoints[theIndexSpawn].position, transform.rotation);
 
             IAMovement theMovement = anAI.GetComponent<IAMovement>();
 
@@ -67,7 +83,7 @@ public class IAManager : Singleton<IAManager>
                 theMovement.myType = Type.Civilian;
             }
 
-            theMovement.Activation(mustBeATarget);
+            theMovement.Activation(mustBeATarget, true);
             Population.Add(theMovement);
 
             a += 1;
@@ -94,6 +110,17 @@ public class IAManager : Singleton<IAManager>
                 {
                     Targets_.Remove(Population[i]);
                     Destroy(Population[i].gameObject);
+
+                    needNewPopulation = true;
+
+                    if(PoliceIncoming == false && PolicemanOnGround == false)
+                    {
+                        VictimesActuelles += 1;
+                        if(VictimesActuelles >= VictimesPourPolice)
+                        {
+                            PoliceIncoming = true;
+                        }
+                    }
                 }
             }
 
@@ -106,6 +133,47 @@ public class IAManager : Singleton<IAManager>
         if (TargetCount_t != null)
         {
             TargetCount_t.text = Targets_.Count.ToString();
+        }
+    }
+
+    private void Update()
+    {
+        if (PoliceIncoming)
+        {
+            TempsPolice += Time.deltaTime;
+            if(TempsPolice >= LatencePolice)
+            {
+                SpawnPoliceman();
+                PolicemanOnGround = true;
+                VictimesActuelles = 0;
+                PoliceIncoming = false;
+                TempsPolice = 0;
+            }
+        }
+
+        if (needNewPopulation)
+        {
+            TempsNouveauxArrivants += Time.deltaTime;
+            if(TempsNouveauxArrivants >= LatenceNouveauxArrivants)
+            {
+                needNewPopulation = false;
+                TempsNouveauxArrivants = 0;
+                int nombreNecessaire = LimitePopulation - Population.Count;
+
+                for (int i = 0; i < nombreNecessaire; i++)
+                {
+                    int theIndexSpawn = Random.Range(0, SpawnPoints.Count);
+
+                    GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
+                SpawnPoints[theIndexSpawn].position, transform.rotation);
+
+                    IAMovement theMovement = anAI.GetComponent<IAMovement>();
+
+                    theMovement.myType = Type.Civilian;
+                    theMovement.Activation();
+                    Population.Add(theMovement);
+                }
+            }
         }
     }
 
@@ -155,5 +223,33 @@ public class IAManager : Singleton<IAManager>
                 Population[i].PortéeSurveillance -= 2;
             }
         }
+    }
+
+    public void SpawnPoliceman()
+    {
+        int theIndexSpawn = Random.Range(0, SpawnPoints.Count);
+
+        GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
+    SpawnPoints[theIndexSpawn].position, transform.rotation);
+
+        IAMovement theMovement = anAI.GetComponent<IAMovement>();
+
+        theMovement.myType = Type.Policeman;
+        theMovement.Activation();
+        Population.Add(theMovement);
+    }
+
+    public void SpawnCivil()
+    {
+        int theIndexSpawn = Random.Range(0, SpawnPoints.Count);
+
+        GameObject anAI = Instantiate(Resources.Load<GameObject>("Prefabs/IA"),
+    SpawnPoints[theIndexSpawn].position, transform.rotation);
+
+        IAMovement theMovement = anAI.GetComponent<IAMovement>();
+
+        theMovement.myType = Type.Civilian;
+        theMovement.Activation();
+        Population.Add(theMovement);
     }
 }
