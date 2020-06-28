@@ -5,6 +5,7 @@ using System.Linq;
 
 public class Player_bulle : MonoBehaviour
 {
+    Player_Movement PM;
     Item it;
     public LayerMask theLayerMask;
 
@@ -18,6 +19,7 @@ public class Player_bulle : MonoBehaviour
     private void Awake()
     {
         it = GetComponent<Item>();
+        PM = Player_Movement.Instance;
     }
 
     private void Update()
@@ -79,6 +81,8 @@ public class Player_bulle : MonoBehaviour
                 }
             }
         }
+
+        PM.myAnimator.SetTrigger("Tir");
     }
 
     void AddObjectSound()
