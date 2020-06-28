@@ -880,6 +880,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1378707218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1662693260168339228, guid: abc938b7e306718449b6990aecc9d018,
+    type: 3}
+  m_PrefabInstance: {fileID: 890184368}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1478358350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,6 +1109,7 @@ MonoBehaviour:
   Targets_: []
   TargetCount_t: {fileID: 950741159}
   Portraits: []
+  thePortraitPanel: {fileID: 1378707218}
   KnownPath: 
   theRedAlert: 0
 --- !u!4 &1789036859
