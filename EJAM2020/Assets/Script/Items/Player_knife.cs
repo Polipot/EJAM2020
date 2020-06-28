@@ -6,6 +6,8 @@ public class Player_knife : MonoBehaviour
 {
     CameraShaker CS;
     Player_Movement PM;
+    public BoxCollider bc;
+    public BoxCollider bcItem;
 
     Item it;
     [Range(0,3)]
@@ -22,11 +24,14 @@ public class Player_knife : MonoBehaviour
 
     private void Update()
     {
+
         if (it != null && it.OnPlayer)
         {
             if (Input.GetAxis("Fire") > 0 && ok)
             {
-                JETIRE();
+                PM.myAnimator.SetTrigger("Knife");
+                bc.enabled = true;
+                Invoke("JETIRE", 0.05f);
                 time = 0;
                 ok = false;
             }
@@ -40,23 +45,21 @@ public class Player_knife : MonoBehaviour
                     ok = true;
                 }
             }
-        }
+        }     
     }
 
     void JETIRE()
     {
-        RaycastHit hit;
-        Debug.DrawRay(it.Player.position, it.Player.forward);
-        if (Physics.Raycast(it.Player.position, it.Player.forward, out hit, 1f))
-        {
-            if (hit.collider.GetComponent<IAMovement>() != null)
-            {
-                CS.CameraShake();
-                hit.collider.GetComponent<IAMovement>().Hited(transform.position, true);
-            }
-        }
+        bc.enabled = false;
+    }
 
-        PM.myAnimator.SetTrigger("Knife");
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<IAMovement>() != null && it.Player != null)
+        {
+            CS.CameraShake();
+            other.GetComponent<IAMovement>().Hited(transform.position, true);
+        }
     }
 
 }

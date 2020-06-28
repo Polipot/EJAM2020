@@ -24,7 +24,7 @@ public class EndGame : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && isFinished)
         {
             Debug.Log("FIN DU GAME");
         }

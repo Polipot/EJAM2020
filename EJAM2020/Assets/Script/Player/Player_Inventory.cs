@@ -34,9 +34,9 @@ public class Player_Inventory : MonoBehaviour
 
                 GetNewItem(temp.gameObject);
 
-                temp.GetComponent<Collider>().enabled = false;
                 Dialogue_text.text = "";
 
+                temp.gameObject.tag = "Untagged";
                 temp = null;
                 it = null;
             }
@@ -71,15 +71,17 @@ public class Player_Inventory : MonoBehaviour
 
     void drop(GameObject dropIt)
     {
+        currentlyItem.tag = "Item";
         currentlyItem.transform.SetParent(null);
         currentlyItem.GetComponent<Item>().DropOrGet(false, null);
-        dropIt.GetComponent<Collider>().enabled = true;
+        currentlyItem.GetComponent<Item>().EnableCollider(true);
     }
 
     void GetNewItem(GameObject tt)
     {
         currentlyItem = tt;
         tt.GetComponent<Item>().DropOrGet(true, transform);
+        currentlyItem.GetComponent<Item>().EnableCollider(false);
         tt.transform.SetParent(ParentForItem);
         tt.transform.position = ParentForItem.position;
         tt.transform.localEulerAngles = new Vector3(-90,0,0);

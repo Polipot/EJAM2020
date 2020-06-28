@@ -138,7 +138,6 @@ public class Tuto : Singleton<Tuto>
     {
         if (!first && canvasTuto.activeSelf)
         {
-            Debug.Log("AAAAAAAAAAAAAAAAAAAAA");
 
             first = true;
             Time.timeScale = 0;
@@ -175,31 +174,4 @@ public class Tuto : Singleton<Tuto>
     {
         Application.Quit();
     }
-
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<IAMovement>() != null)
-        {
-            IAMovement ia = other.GetComponent<IAMovement>();
-
-            if (ia.myType == Type.Civilian)
-            {
-                Pepole_g.SetActive(true);
-                Pepole.text = inno;
-            }
-
-            if (ia.myType == Type.Guard)
-            {
-                Pepole_g.SetActive(true);
-                Pepole.text = garde;
-            }
-
-            if (ia.myType == Type.Policeman)
-            {
-                Pepole_g.SetActive(true);
-                Pepole.text = police;
-            }
-        }
-    }*/
 }
