@@ -65,7 +65,14 @@ public class Player_knife : MonoBehaviour
             CS.CameraShake();
             other.GetComponent<IAMovement>().Hited(transform.position, true);
             bc.enabled = false;
+            AddObjectSound();
         }
+    }
+
+    void AddObjectSound()
+    {
+        var O_sound = (GameObject)Instantiate(Resources.Load("SoundObject_"), transform.position, transform.rotation);
+        Destroy(O_sound, 3f);
     }
 
 }

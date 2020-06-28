@@ -743,9 +743,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6351879256356705397, guid: 4f9be8289b18b514494cee531abafa1e,
         type: 3}
+      propertyPath: MusicRooms.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6351879256356705397, guid: 4f9be8289b18b514494cee531abafa1e,
+        type: 3}
       propertyPath: RM
       value: 
       objectReference: {fileID: 475111655}
+    - target: {fileID: 6351879256356705397, guid: 4f9be8289b18b514494cee531abafa1e,
+        type: 3}
+      propertyPath: MusicRooms.Array.data[0]
+      value: 
+      objectReference: {fileID: 577574722}
+    - target: {fileID: 6351879256356705397, guid: 4f9be8289b18b514494cee531abafa1e,
+        type: 3}
+      propertyPath: MusicRooms.Array.data[1]
+      value: 
+      objectReference: {fileID: 1666586798}
+    - target: {fileID: 6351879256356705397, guid: 4f9be8289b18b514494cee531abafa1e,
+        type: 3}
+      propertyPath: MusicRooms.Array.data[2]
+      value: 
+      objectReference: {fileID: 376588689}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9be8289b18b514494cee531abafa1e, type: 3}
 --- !u!114 &690218181 stripped
