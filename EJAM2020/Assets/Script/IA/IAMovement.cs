@@ -11,6 +11,8 @@ public class IAMovement : MonoBehaviour
 {
     IAManager IAM;
     Player_Movement PM;
+    [HideInInspector]
+    public aSkin mySkin;
     bool Actif;
     [HideInInspector]
     public string SkinChemin;
@@ -66,7 +68,8 @@ public class IAMovement : MonoBehaviour
         Radar = transform.GetChild(1).gameObject;
         Radar.transform.localScale = new Vector3(PortéeSurveillance, PortéeSurveillance, 1);
         Radar.GetComponent<SpriteRenderer>().color = new Color(Color.yellow.r, Color.yellow.g, Color.yellow.b, Radar.GetComponent<SpriteRenderer>().color.a);
-        GetComponentInChildren<aSkin>().LoadSkin(this);
+        mySkin = GetComponentInChildren<aSkin>();
+        mySkin.LoadSkin(this);
         Actif = true;
     }
 
@@ -134,14 +137,12 @@ public class IAMovement : MonoBehaviour
                         if (ToPlayer[i].collider.tag.Equals("Player"))
                         {
                             // a toujours le joueur en vue
-                            Debug.Log("Player");
                             break;
                         }
                         else if (ToPlayer[i].collider.tag.Equals("Wall"))
                         {
                             // a perdu la trace du joueur
                             LostInPursuit();
-                            Debug.Log("Wall");
                             break;
                         }
                     }
@@ -309,6 +310,10 @@ public class IAMovement : MonoBehaviour
 
         IAManager.Instance.NeedsToUpdate = true;
         myAction = Action.Dead;
+        if (IsTarget)
+        {
+            IAM.DeletePortrait(mySkin.Tête.sprite);
+        }
     }
 
     public void Found()

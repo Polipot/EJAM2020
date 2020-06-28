@@ -24,6 +24,7 @@ public class IAManager : Singleton<IAManager>
     public List<IAMovement> Targets_;
     public Text TargetCount_t;
     public GameObject[] Portraits;
+    public GameObject thePortraitPanel;
 
     [Header("Surveillance")]
     public string KnownPath;
@@ -54,6 +55,8 @@ public class IAManager : Singleton<IAManager>
                 if (i % 2 == 1 && Limite_target > 0)
                 {
                     theMovement.IsTarget = true;
+                    theMovement.mySkin = theMovement.transform.GetComponentInChildren<aSkin>();
+                    theMovement.mySkin.LoadSkin(theMovement);
                     Targets_.Add(theMovement);
                     Limite_target--;
                     //Debug.Log("IM A TARGET");
@@ -64,8 +67,6 @@ public class IAManager : Singleton<IAManager>
                 }
                 theMovement.myType = Type.Civilian;
             }
-
-            RefreshPortraits();
 
             theMovement.Activation();
             Population.Add(theMovement);
@@ -94,8 +95,6 @@ public class IAManager : Singleton<IAManager>
                 {
                     Targets_.Remove(Population[i]);
                     Destroy(Population[i].gameObject);
-
-                    RefreshPortraits();
                 }
             }
 
@@ -111,18 +110,20 @@ public class IAManager : Singleton<IAManager>
         }
     }
 
-    void RefreshPortraits()
+    public void AddPortraits(string path)
     {
-        if (Portraits.Length > 0)
-        {
-            for (int x = 0; x < Portraits.Length; x++)
-            {
-                Portraits[x].SetActive(false);
+        GameObject newPortrait = Instantiate(Resources.Load<GameObject>("Prefabs/aPortrait"), thePortraitPanel.transform);
+        newPortrait.GetComponent<Image>().sprite = Resources.Load<Sprite>(path + "/Tête");
+    }
 
-                if (x < Targets_.Count)
-                {
-                    Portraits[x].SetActive(true);
-                }
+    public void DeletePortrait(Sprite theTête)
+    {
+        for (int i = 0; i < thePortraitPanel.transform.childCount; i++)
+        {
+            if(thePortraitPanel.transform.GetChild(i).GetComponent<Image>().sprite == theTête)
+            {
+                thePortraitPanel.transform.GetChild(i).gameObject.SetActive(false);
+                break;
             }
         }
     }

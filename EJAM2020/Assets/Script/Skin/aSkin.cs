@@ -5,8 +5,10 @@ using System.IO;
 
 public class aSkin : MonoBehaviour
 {
+    IAManager IAM;
     IAMovement myIA;
     Player_Movement myPlayer;
+    bool AlreadyAsignedOnTarget;
 
     [Header("Parties du Skin")]
     public SpriteRenderer Corps;
@@ -49,6 +51,7 @@ public class aSkin : MonoBehaviour
         }
 
         myIA = GetComponentInParent<IAMovement>();
+        IAM = IAManager.Instance;
     }
 
     // Update is called once per frame
@@ -73,7 +76,7 @@ public class aSkin : MonoBehaviour
             theIA.SkinChemin = "Skins/Guard";
         }
 
-        else if(theIA.myType == Type.Civilian)
+        else if(theIA.myType == Type.Civilian && AlreadyAsignedOnTarget == false)
         {
             DirectoryInfo dir = new DirectoryInfo("Assets/Resources/Skins/Civil");
             DirectoryInfo[] info = dir.GetDirectories("*.*");
@@ -91,6 +94,12 @@ public class aSkin : MonoBehaviour
             MainGauche.sprite = Resources.Load<Sprite>("Skins/Civil/Civil_" + rnd + "/Main");
 
             theIA.SkinChemin = "Skins/Civil/Civil_" + rnd;
+
+            if (myIA.IsTarget)
+            {
+                IAM.AddPortraits(theIA.SkinChemin);
+                AlreadyAsignedOnTarget = true;
+            }
         }
     }
 
