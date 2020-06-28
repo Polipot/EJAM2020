@@ -61,6 +61,7 @@ public class Player_bulle : MonoBehaviour
 
             else if (hit[i].collider.GetComponent<CourtCircuit>())
             {
+                hit[i].collider.GetComponent<CourtCircuit>().Activation();
                 break;
             }
 
