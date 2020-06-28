@@ -2829,7 +2829,7 @@ MonoBehaviour:
   needNewPopulation: 0
   TempsNouveauxArrivants: 0
   LimitePopulation: 150
-  PersonnesPourUnGarde: 15
+  PersonnesPourUnGarde: 7
   LatenceNouveauxArrivants: 60
   Limite_target: 4
   Targets_: []

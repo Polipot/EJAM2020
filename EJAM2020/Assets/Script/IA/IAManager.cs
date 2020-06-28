@@ -17,6 +17,7 @@ public class IAManager : Singleton<IAManager>
     public float TempsNouveauxArrivants;
     [Range(10, 150)]
     public int LimitePopulation;
+    [Range(1, 30)]
     public int PersonnesPourUnGarde;
     [Range(10, 150)]
     public float LatenceNouveauxArrivants;

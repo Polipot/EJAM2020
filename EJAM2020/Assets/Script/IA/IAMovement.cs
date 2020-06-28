@@ -143,7 +143,7 @@ public class IAMovement : MonoBehaviour
                     }
                 }
 
-                else if(myAction == Action.Interaction)
+                else if(myAction == Action.Interaction && PiegeReservé != null)
                 {
                     transform.LookAt(new Vector3(PiegeReservé.transform.position.x, transform.position.y, PiegeReservé.transform.position.z));
                     MoveTime += Time.deltaTime;
@@ -335,7 +335,7 @@ public class IAMovement : MonoBehaviour
                 }
             }
 
-            else if (isFuite == false)
+            if (isFuite == false)
             {
                 myAction = Action.Move;
                 myAnimator.SetTrigger("Walk");
@@ -350,11 +350,6 @@ public class IAMovement : MonoBehaviour
             if (BasePerso)
             {
                 BasePerso = false;
-                Vector3 theDestination = myNavMesh.destination;
-
-                myNavMesh.enabled = false;
-                transform.position = theDestination;
-                myNavMesh.enabled = true;
             }
         }
     }

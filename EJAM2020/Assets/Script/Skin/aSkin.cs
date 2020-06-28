@@ -17,6 +17,17 @@ public class aSkin : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void LoadSkin(IAMovement theIA)
+    {
         SpriteRenderer[] LesSprites = GetComponentsInChildren<SpriteRenderer>();
 
         for (int i = 0; i < LesSprites.Length; i++)
@@ -52,17 +63,8 @@ public class aSkin : MonoBehaviour
 
         myIA = GetComponentInParent<IAMovement>();
         IAM = IAManager.Instance;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void LoadSkin(IAMovement theIA)
-    {
-        if(theIA.myType == Type.Guard)
+        if (theIA.myType == Type.Guard)
         {
             Corps.sprite = Resources.Load<Sprite>("Skins/Guard/Corps");
             Tête.sprite = Resources.Load<Sprite>("Skins/Guard/Tête");
@@ -119,6 +121,39 @@ public class aSkin : MonoBehaviour
 
     public void LoadSkin(Player_Movement thePlayer, string path = "Skins/Civil/Civil_1")
     {
+        SpriteRenderer[] LesSprites = GetComponentsInChildren<SpriteRenderer>();
+
+        for (int i = 0; i < LesSprites.Length; i++)
+        {
+            switch (LesSprites[i].gameObject.name)
+            {
+                case "Corps":
+                    Corps = LesSprites[i];
+                    break;
+                case "Tête":
+                    Tête = LesSprites[i];
+                    break;
+                case "EpauleDroite":
+                    EpauleDroite = LesSprites[i];
+                    break;
+                case "BrasDroite":
+                    BrasDroit = LesSprites[i];
+                    break;
+                case "MainDroite":
+                    MainDroite = LesSprites[i];
+                    break;
+                case "EpauleGauche":
+                    EpauleGauche = LesSprites[i];
+                    break;
+                case "BrasGauche":
+                    BrasGauche = LesSprites[i];
+                    break;
+                case "MainGauche":
+                    MainGauche = LesSprites[i];
+                    break;
+            }
+        }
+
         Corps.sprite = Resources.Load<Sprite>(path + "/Corps");
         Tête.sprite = Resources.Load<Sprite>(path + "/Tête");
         EpauleDroite.sprite = Resources.Load<Sprite>(path + "/Epaule");
